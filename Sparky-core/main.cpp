@@ -22,6 +22,11 @@ int main()
 	mat4 position = mat4::translation(vec3(2, 3, 4));
 	position *= mat4::identity();
 
+	position.elements[12] = 2.0f;
+	vec4 column = position.columns[3];
+
+	std::cout << column << std::endl;
+
 	while (!window.closed())
 	{
 		/*std::cout << window.getWidth() << ", " <<  window.getHeight() << std::endl;
@@ -40,7 +45,7 @@ int main()
 		std::cout << x << " , " << y << std::endl;*/
 
 		window.clear();
-		std::cout << c << std::endl;
+		//std::cout << c << std::endl;
 #if 1
 		glBegin(GL_QUADS);
 		glVertex2f(-0.5f, -0.5f);
