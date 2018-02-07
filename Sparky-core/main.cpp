@@ -6,6 +6,8 @@
 #include "src/graphics/buffers/indexbuffer.h"
 #include "src/graphics/buffers/vertexarray.h"
 
+#include "src/graphics/renderer2d.h"
+#include "src/graphics/simple2drenderer.h"
 
 int main()
 {
@@ -13,28 +15,10 @@ int main()
 	using namespace graphics;
 	using namespace maths;
 
-	Window window("Sparky! ", 800, 600);
+	Window window("Sparky! ", 960, 540);
 	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);        // blue colored window
-#if 0
-	GLfloat vertices[] =
-	{
-		0,0,0,
-		8,0,0,
-		0,3,0,
-		0,3,0,
-		8,3,0,
-		8,0,0
-		
-	};
 
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-#else
-	GLfloat vertices[] =
+	/*GLfloat vertices[] =
 	{
 		0, 0, 0,
 		0, 3, 0,
@@ -50,18 +34,18 @@ int main()
 
 	GLfloat colorsA[] =                       // 4 as there are 4 vertices
 	{
-		1, 0, 1, 1,
-		1, 0, 1, 1,
-		1, 0, 1, 1,
+		1, 0, 0, 1,
+		0, 1, 0, 1,
+		0, 0, 1, 1,
 		1, 0, 1, 1
 
 	};
 
 	GLfloat colorsB[] =                       // 4 as there are 4 vertices
 	{
+		0.2f, 0.8f, 0.8f, 1,
 		0.2f, 0.3f, 0.8f, 1,
-		0.2f, 0.3f, 0.8f, 1,
-		0.2f, 0.3f, 0.8f, 1,
+		0.8f, 0.3f, 0.8f, 1,
 		0.2f, 0.3f, 0.8f, 1
 	};
 
@@ -78,7 +62,8 @@ int main()
 
 	//vao.addBuffer(vbo, 0);                                // adding buffer at index 0
 
-#endif
+	*/
+
 
 	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 
@@ -86,6 +71,10 @@ int main()
 	shader.enable();
 	shader.setUniformMat4("pr_matrix", ortho);
 	shader.setUniformMat4("ml_matrix", mat4::translation(vec3(4, 3, 0)));
+
+	Renderable2D sprite(maths::vec3(5, 5, 0), maths::vec2(4, 4), maths::vec4(1, 0, 1, 1), shader);
+	Renderable2D sprite2(maths::vec3(7, 1, 0), maths::vec2(2, 3), maths::vec4(0.2f, 0, 1, 1), shader);
+	Simple2DRenderer renderer;
 
 	shader.setUniform2f("light_pos", vec2(4.0f, 1.5f));
 	shader.setUniform4f("colour", vec4(0.2f, 0.3f, 0.8f, 1.0f));
@@ -105,13 +94,13 @@ int main()
 		double x, y;
 		window.getMousePosition(x, y);
 		std::cout << x << " , " << y << std::endl;*/
-
+		window.clear();
 		double x, y;
 		window.getMousePosition(x, y);
 		shader.setUniform2f("light_pos", vec2((float)(x * 16.0f / 960.0f), (float)(9.0f - y * 9.0f / 540.0f)));
-#if 0
+/*
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-#else
+
 		sprite1.bind();
 		ibo.bind();
 		shader.setUniformMat4("ml_matrix", mat4::translation(vec3(4, 3, 0)));
@@ -125,7 +114,11 @@ int main()
 		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_SHORT, 0);              // 0 as we are binding our indices
 		ibo.unbind();
 		sprite2.unbind();
-#endif
+*/
+		renderer.submit(&sprite);
+		renderer.submit(&sprite2);
+		renderer.flush();
+
 		window.update();
 	}
 	//system("PAUSE");
