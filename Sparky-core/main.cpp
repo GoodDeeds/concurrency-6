@@ -132,12 +132,15 @@ int main()
 */
 
 
+#include <iostream>
+#include "MainGame.h"
 
-#include <SDL/SDL.h>
 
 int main(int argc, char** argv)
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
-	system("pause");
+	MainGame maingame;
+	maingame.run();
+
+
 	return 0;
 }
