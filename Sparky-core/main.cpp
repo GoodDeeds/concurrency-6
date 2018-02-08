@@ -1,4 +1,4 @@
-#include "src/graphics/window.h"
+/*#include "src/graphics/window.h"
 #include "src/graphics/shader.h"
 #include "src/maths/maths.h"
 
@@ -17,7 +17,7 @@ int main()
 
 	Window window("Sparky! ", 960, 540);
 	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);        // blue colored window
-
+*/
 	/*GLfloat vertices[] =
 	{
 		0, 0, 0,
@@ -65,7 +65,7 @@ int main()
 	*/
 
 
-	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
+/*	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 
 	Shader shader("src/shaders/basic.vert", "src/shaders/basic.frag");
 	shader.enable();
@@ -81,6 +81,7 @@ int main()
 
 	while (!window.closed())
 	{
+*/
 		/*std::cout << window.getWidth() << ", " <<  window.getHeight() << std::endl;
 		if (window.isKeyPressed(GLFW_KEY_A))
 		{
@@ -94,11 +95,12 @@ int main()
 		double x, y;
 		window.getMousePosition(x, y);
 		std::cout << x << " , " << y << std::endl;*/
-		window.clear();
+/*		window.clear();
 		double x, y;
 		window.getMousePosition(x, y);
 		shader.setUniform2f("light_pos", vec2((float)(x * 16.0f / 960.0f), (float)(9.0f - y * 9.0f / 540.0f)));
-/*
+*/
+		/*
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		sprite1.bind();
@@ -114,7 +116,8 @@ int main()
 		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_SHORT, 0);              // 0 as we are binding our indices
 		ibo.unbind();
 		sprite2.unbind();
-*/
+		*/
+/*
 		renderer.submit(&sprite);
 		renderer.submit(&sprite2);
 		renderer.flush();
@@ -122,5 +125,19 @@ int main()
 		window.update();
 	}
 	//system("PAUSE");
+	return 0;
+}
+*/
+
+#include <iostream>
+#include "MainGame.h"
+
+
+int main(int argc, char** argv)
+{
+	MainGame maingame;
+	maingame.run();	
+
+	
 	return 0;
 }
