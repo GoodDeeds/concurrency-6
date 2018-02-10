@@ -1,16 +1,13 @@
 #include "MainGame.h"
 #include "Errors.h"
+#include "ImageLoader.h"
 
 #include <iostream>
 #include <string>
 
 
-MainGame::MainGame()
+MainGame::MainGame() :_screenWidth(800), _screenHeight(600), _time(0.0f), _window(nullptr), _gameState(GameState::PLAY)
 {
-	_window = nullptr;
-	_screenHeight = 600;
-	_screenWidth = 800;
-	_gameState = GameState::PLAY;
 }
 
 
@@ -23,7 +20,9 @@ void MainGame::run() {
 	initSystems();
 
 	_sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);               // Normalised coordinates
-
+	
+	_playerTexture = ImageLoader::loadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	
 	gameLoop();
 }
 
@@ -57,6 +56,7 @@ void MainGame::initShaders() {
 	_colorProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
 	_colorProgram.addAttribute("vertexPosition");
 	_colorProgram.addAttribute("vertexColor");
+	_colorProgram.addAttribute("vertexUV");
 	_colorProgram.linkShaders();
 }
 
@@ -64,6 +64,8 @@ void MainGame::gameLoop() {
 
 	while (_gameState != GameState::EXIT) {
 		processInput();
+
+		_time += 0.01;
 
 		drawGame();
 	}
@@ -89,9 +91,17 @@ void MainGame::drawGame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	   // clearing color buffer and depth buffer
 
 	_colorProgram.use();
+	glActiveTexture(GL_TEXTURE0);                         // used for multitexturing
+	glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
+	GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
+	glUniform1i(textureLocation, 0);                       // 0 as we have used GL_TEXTURE0
+
+	GLuint timeLocation = _colorProgram.getUniformLocation("time");
+	glUniform1f(timeLocation, _time);
 
 	_sprite.draw();
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	_colorProgram.unuse();
 
 	SDL_GL_SwapWindow(_window);
