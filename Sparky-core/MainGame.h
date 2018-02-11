@@ -3,6 +3,8 @@
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
+#include <vector>
+
 #include "GLSLProgram.h"
 #include "Sprite.h"
 #include "GLTexture.h"
@@ -25,16 +27,20 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
+	void calculateFPS();
 
 	SDL_Window * _window;
 	int _screenWidth;
 	int _screenHeight;
 	GameState _gameState;
 
-	Sprite _sprite;
+	std::vector <Sprite*> _sprites;
 
 	GLSLProgram _colorProgram;
-	GLTexture _playerTexture;
+
+	float _fps;
+	float _maxFPS;
+	float _frameTime;
 
 	float _time;
 
