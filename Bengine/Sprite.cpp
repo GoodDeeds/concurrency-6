@@ -75,18 +75,27 @@ namespace Bengine {
 
 		glEnableVertexAttribArray(0);
 
+		glEnableVertexAttribArray(1);
+
+		glEnableVertexAttribArray(2);
+
 		//This is the position attribute pointer, index is 0 refer shadingColor.vert
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));  // 2 is coordinates x,y
 
-		//This is the color attribute pointer, index is 1 refer shadingColor.vert
+																											 //This is the color attribute pointer, index is 1 refer shadingColor.vert
 		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color));
 
 		//This is the UV attribute pointer
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
+
 		glDrawArrays(GL_TRIANGLES, 0, 6);                  // no of vertices = 6
 
 		glDisableVertexAttribArray(0);
+
+		glDisableVertexAttribArray(1);
+
+		glDisableVertexAttribArray(2);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
