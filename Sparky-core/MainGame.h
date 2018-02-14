@@ -10,10 +10,14 @@
 #include <Bengine/Sprite.h>
 #include <Bengine/GLTexture.h>
 #include <Bengine/Window.h>
+#include <Bengine/InputManager.h>
+#include <Bengine/Timing.h>
 
 #include <Bengine/SpriteBatch.h> 
 
 #include <Bengine/Camera2D.h>
+
+#include "Bullet.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -33,7 +37,6 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
-	void calculateFPS();
 
 	Bengine::Window  _window;
 	int _screenWidth;
@@ -46,10 +49,13 @@ private:
 
 	Bengine::SpriteBatch _spriteBatch;
 
-	float _fps;
-	float _maxFPS;
-	float _frameTime;
+	Bengine::InputManager _inputManager;
+	Bengine::FpsLimiter _fpsLimiter;
 
+	std::vector<Bullet> _bullets;
+
+	float _maxFPS;
+	float _fps;
 	float _time;
 
 };

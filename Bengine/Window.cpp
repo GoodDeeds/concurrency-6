@@ -50,6 +50,11 @@ namespace Bengine {
 																	 //Set VSYNC
 		SDL_GL_SetSwapInterval(0);     // 0 is off , 1 is on
 
+
+		//Enable alpha blend
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);                
+
 		return 0;
 	}
 

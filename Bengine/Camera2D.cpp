@@ -37,4 +37,17 @@ namespace Bengine {
 			_needsMatrixUpdate = false;
 		}
 	}
+
+	glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 screenCoords) {
+		//Invert Y direction
+		screenCoords.y = _screenHeight - screenCoords.y;
+		//Make it so that 0 is the center
+		screenCoords -= glm::vec2(_screenWidth / 2, _screenHeight / 2);
+		//Scale the coordinates
+		screenCoords /= _scale;
+		//Translate with the camera position
+		screenCoords += _position;
+
+		return screenCoords;
+	}
 }
