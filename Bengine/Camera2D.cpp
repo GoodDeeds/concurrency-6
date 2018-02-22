@@ -28,7 +28,7 @@ namespace Bengine {
 		if (_needsMatrixUpdate) {
 
 			//Camera Translation
-			glm::vec3 translate(-_position.x + _screenWidth/2, -_position.y + -_screenHeight/2, 0.0f);
+			glm::vec3 translate(-_position.x + _screenWidth/2, -_position.y + _screenHeight/2, 0.0f);
 			_cameraMatrix = glm::translate(_orthoMatrix, translate);
 
 			//Scale Translation

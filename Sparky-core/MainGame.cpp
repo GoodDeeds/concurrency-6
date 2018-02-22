@@ -50,6 +50,8 @@ void MainGame::gameLoop() {
 		
 		_fpsLimiter.begin();
 
+		_inputManager.update();
+
 		processInput();
 
 		_time += 0.1;
@@ -110,22 +112,22 @@ void MainGame::processInput() {
 		}
 	}
 
-	if (_inputManager.isKeyPressed(SDLK_w)) {
+	if (_inputManager.isKeyDown(SDLK_w)) {
 		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
 	}
-	if (_inputManager.isKeyPressed(SDLK_s)) {
+	if (_inputManager.isKeyDown(SDLK_s)) {
 		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
 	}
-	if (_inputManager.isKeyPressed(SDLK_a)) {
+	if (_inputManager.isKeyDown(SDLK_a)) {
 		_camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
 	}
-	if (_inputManager.isKeyPressed(SDLK_d)) {
+	if (_inputManager.isKeyDown(SDLK_d)) {
 		_camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
 	}
-	if (_inputManager.isKeyPressed(SDLK_q)) {
+	if (_inputManager.isKeyDown(SDLK_q)) {
 		_camera.setScale(_camera.getScale() + SCALE_SPEED);
 	}
-	if (_inputManager.isKeyPressed(SDLK_e)) {
+	if (_inputManager.isKeyDown(SDLK_e)) {
 		_camera.setScale(_camera.getScale() - SCALE_SPEED);
 	}
 
@@ -176,7 +178,7 @@ void MainGame::drawGame() {
 
 
 	_spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
-	//_spriteBatch.draw(pos + glm::vec4(50, 0, 0, 0), uv, texture.id, 0.0f, color);
+	//_spriteBatch.draw(pos + glm::vec4(0, 60 , 0, 0), uv, texture.id, 0.0f, color);
 	
 	for (int i = 0; i < _bullets.size(); i++) {
 		_bullets[i].draw(_spriteBatch);
