@@ -37,7 +37,7 @@ void MainGame::initSystems() {
 }
 
 void MainGame::initShaders() {
-	_colorProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	_colorProgram.compileShaders("../Sparky-core/Shaders/colorShading.vert", "../Sparky-core/Shaders/colorShading.frag");
 	_colorProgram.addAttribute("vertexPosition");
 	_colorProgram.addAttribute("vertexColor");
 	_colorProgram.addAttribute("vertexUV");
@@ -168,7 +168,7 @@ void MainGame::drawGame() {
 
 	glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	
 	Bengine::Color color;
 	color.r = 255;
