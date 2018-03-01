@@ -18,17 +18,17 @@
 #include <Bengine/Camera2D.h>
 
 #include "Bullet.h"
+#include "player.h"
 #include "Sockets.h"
 #include <mutex>
 
-enum class GameState { PLAY, EXIT };
+enum class GameState1 { PLAY, EXIT };
 
-class MainGame
+class BasicGameServer
 {
 public:
-	//MainGame(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketClient* sockClient);
-	MainGame();
-	~MainGame();
+	BasicGameServer(socketServer* sockServer);
+	~BasicGameServer();
 
 	void run();                   // to run our game
 
@@ -41,10 +41,12 @@ private:
 	void gameLoop();
 	void drawGame();
 
+	void receiver();
+
 	Bengine::Window  _window;
 	int _screenWidth;
 	int _screenHeight;
-	GameState _gameState;
+	GameState1 _gameState;
 
 
 	Bengine::GLSLProgram _colorProgram;
@@ -61,5 +63,9 @@ private:
 	float _fps;
 	float _time;
 
+	socketServer* socket;
+	std::string data;
+	int m_time;
+	std::mutex mtx, timeMtx;
 };
 

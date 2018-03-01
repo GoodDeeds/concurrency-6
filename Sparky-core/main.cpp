@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include "MainGame.h"
+#include "BasicGame.h"
 
+#include "BasicGameServer.h"
 #include <Bengine/Errors.h>
 #include "Sockets.h"
 #include <thread>
@@ -20,6 +22,10 @@ int main(int argc, char** argv)
 	std::string name2;
 	name2 = std::string(name);
 
+	std::string s = "hi sfff";
+	char ch[10];
+	strcpy(ch, s.c_str());
+	
 
 	int choice;
 	std::cout << "Enter 1 to be server,2 to be client\n";
@@ -44,15 +50,15 @@ int main(int argc, char** argv)
 		sockThread = std::thread(&socketServer::select_activity, &server);
 		while (server.init);
 		std::string input = "";
-		server.receiveData(input);
-		std::cout << input << std::endl;
+		server.receiveData(input); 
+		std::cout <<" receiving in server "<< input << std::endl;
 		//processString(input, name2, indexOfClient, noOfPlayers, players);
 		//SimpleGameServer simpleGame(noOfPlayers, indexOfClient, players, &server);
 		//simpleGame.run();
 		std::cout << "I am here client " << std::endl;
-		MainGame mainGame;
-		mainGame.run();
-
+		BasicGameServer basicGame(&server);
+		basicGame.run();
+		
 		sockThread.join();
 	}
 	else if (choice == 2)
@@ -63,17 +69,23 @@ int main(int argc, char** argv)
 		socketClient client(ip, SOCK_PORT, 2048);
 		char input[1000];
 		client.receiveBytes(input);
-		std::cout << input;	//connected msg
+		std::cout << input << std::endl;	//connected msg
+
+		std::cout << "name --" << name << std::endl;
 
 		client.sendBytes(name);
+		//client.sendBytes(ch);
 
 		client.receiveBytes(input);
+		std::cout << " receiving in client again " << input;	//connected msg
+
 		std::cout << input << std::endl;
 		std::cout << "I am here client " << std::endl;
 		//processString(std::string(input), name2, indexOfClient, noOfPlayers, players);
 		//SimpleGame mainGame(noOfPlayers, indexOfClient, players, &client);
-		MainGame mainGame;
+		BasicGame mainGame(&client);
 		mainGame.run();
+		
 	}
 	int x;
 	std::cout << "Enter any character to quit" << std::endl;
