@@ -9,23 +9,28 @@
 #include "Sockets.h"
 #include <thread>
 #include <vector>
+#include "player.h"
 
+void processString(std::string & input, std::string & name2, int & indexOfClient, int & noOfPlayers, std::vector<Player> & players);
 
 int main(int argc, char** argv)
 {
 	int noOfPlayers = 0;
 	int indexOfClient = 0;
-	//std::vector<Player> players;
+	std::vector<Player> players;
 	char name[100];
 	std::cout << "Enter your username\n";
 	std::cin >> name;
 	std::string name2;
 	name2 = std::string(name);
-
-	std::string s = "hi sfff";
-	char ch[10];
-	strcpy(ch, s.c_str());
 	
+	std::cout << "Enter your character choice 0-6\n";
+	char playerChoice[100];
+	std::cin >> playerChoice;
+	strcat_s(name, "|");
+	strcat_s(name, playerChoice);
+	strcat_s(name, "|");
+
 
 	int choice;
 	std::cout << "Enter 1 to be server,2 to be client\n";
@@ -51,12 +56,10 @@ int main(int argc, char** argv)
 		while (server.init);
 		std::string input = "";
 		server.receiveData(input); 
-		std::cout <<" receiving in server "<< input << std::endl;
-		//processString(input, name2, indexOfClient, noOfPlayers, players);
-		//SimpleGameServer simpleGame(noOfPlayers, indexOfClient, players, &server);
-		//simpleGame.run();
-		std::cout << "I am here client " << std::endl;
-		BasicGameServer basicGame(&server);
+		std::cout <<" receiving in server --  "<< input << std::endl;
+		processString(input, name2, indexOfClient, noOfPlayers, players);
+		
+		BasicGameServer basicGame(noOfPlayers, indexOfClient, players, &server);
 		basicGame.run();
 		
 		sockThread.join();
@@ -74,16 +77,15 @@ int main(int argc, char** argv)
 		std::cout << "name --" << name << std::endl;
 
 		client.sendBytes(name);
-		//client.sendBytes(ch);
 
 		client.receiveBytes(input);
-		std::cout << " receiving in client again " << input;	//connected msg
+		std::cout << " receiving in client---- " << input << std::endl;	//connected msg
 
-		std::cout << input << std::endl;
-		std::cout << "I am here client " << std::endl;
-		//processString(std::string(input), name2, indexOfClient, noOfPlayers, players);
-		//SimpleGame mainGame(noOfPlayers, indexOfClient, players, &client);
-		BasicGame mainGame(&client);
+
+
+		std::string temp(input);
+		processString(temp, name2, indexOfClient, noOfPlayers, players);
+		BasicGame mainGame(noOfPlayers, indexOfClient, players, &client);
 		mainGame.run();
 		
 	}
@@ -98,3 +100,67 @@ maingame.run();
 
 return 0;
 }*/
+
+
+void processString(std::string & input, std::string & name2, int & indexOfClient, int & noOfPlayers, std::vector<Player> & players)
+{
+	int i = 1;
+	// Data is received in the form no_of_players| followed by
+	while (input[i] != '|')
+	{
+		noOfPlayers = input[i] - '0' + 10 * noOfPlayers;
+		i++;
+	}
+	i++;
+	std::string *pname = new std::string[noOfPlayers];
+	int *pchoice = new int[noOfPlayers];
+	for (int j = 0; j < noOfPlayers; j++)
+	{
+		pname[j] = "";
+		pchoice[j] = 0;
+		while (input[i] != '|')
+		{
+			pname[j] += input[i];
+			i++;
+		}
+		if (name2 == pname[j])
+			indexOfClient = j;
+
+		i++;
+		std::string temp = "";
+		while (input[i] != '|')
+		{
+			temp += input[i];
+			pchoice[j] = std::stoi(temp);
+			i++;
+		}
+		i++;
+	}
+	glm::vec2 *pos = new glm::vec2[noOfPlayers];
+
+	for (int j = 0; j < noOfPlayers; j++)
+	{
+		std::string temp = "";
+		while (input[i] != ' ')
+		{
+			temp += input[i];
+			i++;
+		}
+		i++;
+		float x = std::stof(temp);
+		temp = "";
+		while (input[i] != '&')
+		{
+			temp += input[i];
+			i++;
+		}
+		i++;
+		float y = std::stof(temp);
+		pos[j] = glm::vec2(x, y);
+	}
+	for (int j = 0; j < noOfPlayers; j++)
+	{
+		players.emplace_back(pname[j], pos[j], pchoice[j]);
+	}
+}
+

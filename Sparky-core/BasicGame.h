@@ -20,6 +20,7 @@
 #include "Bullet.h"
 #include "player.h"
 #include "Sockets.h"
+#include "Character.h"
 #include <mutex>
 
 enum class GameState2 { PLAY, EXIT };
@@ -27,7 +28,7 @@ enum class GameState2 { PLAY, EXIT };
 class BasicGame
 {
 public:
-	BasicGame(socketClient* sockClient);
+	BasicGame(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketClient* sockClient);
 	~BasicGame();
 
 	void run();                   // to run our game
@@ -62,6 +63,15 @@ private:
 	float _maxFPS;
 	float _fps;
 	float _time;
+
+	glm::vec2 _playerDim, _bulletDim;
+	std::vector<Character> _chars;
+	Character* _mainPlayer;
+
+	int _noOfPlayers, _currentIndex;
+	//std::string newBulls = "";
+	//int newBullCount = 0;
+	std::vector<Player> _players;
 
 	socketClient* socket;
 	std::string data;

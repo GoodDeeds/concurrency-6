@@ -7,7 +7,7 @@
 
 
 
-Character::Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed, const std::vector<std::string>& levelData)
+Character::Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed /*, const std::vector<std::string>& levelData*/)
 {
 	m_health = 200.0f;
 	m_name = name;

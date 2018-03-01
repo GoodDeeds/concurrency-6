@@ -12,11 +12,17 @@
 //#include "threadPool.h"
 
 
-BasicGame::BasicGame(socketClient* sockClient)
+BasicGame::BasicGame(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketClient* sockClient)
 	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState2::PLAY), _maxFPS(60.0f)
 {
 	socket = sockClient;
 	_camera.init(_screenWidth, _screenHeight);
+
+	_playerDim = glm::vec2(30.0f, 30.0f);
+	_bulletDim = glm::vec2(5.0f, 5.0f);
+	_noOfPlayers = noOfPlayers;
+	_currentIndex = currentIndex;
+	_players = players;
 }
 
 
@@ -48,6 +54,13 @@ void BasicGame::initSystems() {
 
 	_spriteBatch.init();
 	_fpsLimiter.init(_maxFPS);
+
+	for (int i = 0; i < _noOfPlayers; i++)
+	{
+		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1/*, m_leveldata*/);
+	}
+
+	_mainPlayer = &(_chars[_currentIndex]);
 }
 
 void BasicGame::receiver()
@@ -85,6 +98,7 @@ void BasicGame::gameLoop() {
 
 		_time += 0.1;
 
+		_camera.setPosition(_mainPlayer->getPosition());
 		_camera.update();
 
 		//Update all bullets
@@ -100,9 +114,9 @@ void BasicGame::gameLoop() {
 
 		drawGame();
 
-		std::string playerData = "1.0f 0.5f|100.0f|20|0|";
+		std::string temp = _mainPlayer->getData() + "|0)";
 		char d[1000];
-		strcpy(d, playerData.c_str());
+		strcpy(d, temp.c_str());
 		socket->sendBytes(d);
 
 		_fps = _fpsLimiter.end();
@@ -202,7 +216,7 @@ void BasicGame::drawGame() {
 
 	_spriteBatch.begin();
 
-	glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
+	/*glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
@@ -214,10 +228,16 @@ void BasicGame::drawGame() {
 
 
 	_spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
+	*/
 	//_spriteBatch.draw(pos + glm::vec4(0, 60 , 0, 0), uv, texture.id, 0.0f, color);
 
 	for (int i = 0; i < _bullets.size(); i++) {
 		_bullets[i].draw(_spriteBatch);
+	}
+
+	for (int i = 0; i < _noOfPlayers; i++)
+	{
+		_chars[i].draw(_spriteBatch);
 	}
 
 	_spriteBatch.end();

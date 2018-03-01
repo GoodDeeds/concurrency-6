@@ -9,11 +9,17 @@
 #include <cmath>
 
 
-BasicGameServer::BasicGameServer( socketServer* sockServer)
+BasicGameServer::BasicGameServer(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketServer* sockServer)
 	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState1::PLAY), _maxFPS(60.0f)
 {
-	socket = sockServer;
 	_camera.init(_screenWidth, _screenHeight);
+	socket = sockServer;
+
+	_playerDim = glm::vec2(30.0f, 30.0f);
+	_bulletDim = glm::vec2(5.0f, 5.0f);
+	_noOfPlayers = noOfPlayers;
+	_currentIndex = currentIndex;
+	_players = players;
 }
 
 
@@ -25,23 +31,39 @@ void BasicGameServer::run() {
 
 	initSystems();
 
-
-
+	//sending data one time
+	std::string temp = _mainPlayer->getData() + "0|";
+	socket->sendData(temp);
 
 	// only returns when the game ends
 	gameLoop();
 }
 
+/*void SimpleGameServer::loadImage(std::string path, GLuint& ID)
+{
+	ID = ResourceManager::getTexture(path).id;
+}*/
+
 void BasicGameServer::initSystems() {
 
 	Bengine::init();
 
-	_window.create("Game Engine", _screenWidth, _screenHeight, 0);
+	_window.create("Server", _screenWidth, _screenHeight, 0);
 
 	initShaders();
 
 	_spriteBatch.init();
 	_fpsLimiter.init(_maxFPS);
+
+
+	//_leveldata = _levels[m_currentLevel]->getLevelData();
+	for (int i = 0; i < _noOfPlayers; i++)
+	{
+		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1 /*, _leveldata*/);
+	}
+
+	_mainPlayer = &(_chars[_currentIndex]);
+
 }
 
 void BasicGameServer::receiver()
@@ -82,6 +104,7 @@ void BasicGameServer::gameLoop() {
 
 		_time += 0.1;
 
+		_camera.setPosition(_mainPlayer->getPosition());
 		_camera.update();
 
 		//Update all bullets
@@ -96,6 +119,9 @@ void BasicGameServer::gameLoop() {
 		}
 
 		drawGame();
+
+		std::string temp = _mainPlayer->getData() + "0|1";
+		socket->sendData(temp);
 
 		_fps = _fpsLimiter.end();
 
@@ -194,7 +220,7 @@ void BasicGameServer::drawGame() {
 
 	_spriteBatch.begin();
 
-	glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
+	/*glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
@@ -206,10 +232,17 @@ void BasicGameServer::drawGame() {
 
 
 	_spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
+	*/
 	//_spriteBatch.draw(pos + glm::vec4(0, 60 , 0, 0), uv, texture.id, 0.0f, color);
 
 	for (int i = 0; i < _bullets.size(); i++) {
 		_bullets[i].draw(_spriteBatch);
+	}
+
+	//for drawing the clients
+	for (int i = 0; i < _noOfPlayers; i++)
+	{
+		_chars[i].draw(_spriteBatch);
 	}
 
 	_spriteBatch.end();

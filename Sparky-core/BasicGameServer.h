@@ -20,6 +20,7 @@
 #include "Bullet.h"
 #include "player.h"
 #include "Sockets.h"
+#include "Character.h"
 #include <mutex>
 
 enum class GameState1 { PLAY, EXIT };
@@ -27,7 +28,7 @@ enum class GameState1 { PLAY, EXIT };
 class BasicGameServer
 {
 public:
-	BasicGameServer(socketServer* sockServer);
+	BasicGameServer(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketServer* sockServer);
 	~BasicGameServer();
 
 	void run();                   // to run our game
@@ -35,6 +36,8 @@ public:
 
 
 private:
+	void loadImage(std::string path, GLuint& ID);
+
 	void initSystems();           // to initialise opengl and sdl and our game window
 	void initShaders();
 	void processInput();
@@ -42,6 +45,14 @@ private:
 	void drawGame();
 
 	void receiver();
+
+	void initialiseLevel(int currentLevel);
+	void updateChars();
+
+	//std::vector<Level*> _levels;
+
+	int _currentLevel;
+	std::vector<std::string> _leveldata;
 
 	Bengine::Window  _window;
 	int _screenWidth;
@@ -59,9 +70,16 @@ private:
 
 	std::vector<Bullet> _bullets;
 
+	glm::vec2 _playerDim, _bulletDim;
+	std::vector<Character> _chars;
+	Character* _mainPlayer;
+
 	float _maxFPS;
 	float _fps;
 	float _time;
+
+	int _noOfPlayers, _currentIndex;
+	std::vector<Player> _players;
 
 	socketServer* socket;
 	std::string data;

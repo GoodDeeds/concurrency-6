@@ -29,7 +29,7 @@ enum Person
 	class Character
 	{
 	public:
-		Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed, const std::vector<std::string>& levelData);
+		Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed /*, const std::vector<std::string>& levelData*/);
 		~Character();
 		void init();
 		void draw(Bengine::SpriteBatch& spriteBatch);
