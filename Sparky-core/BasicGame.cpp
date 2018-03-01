@@ -14,9 +14,9 @@
 
 BasicGame::BasicGame(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketClient* sockClient)
 	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState2::PLAY), _maxFPS(60.0f)
+
 {
 	socket = sockClient;
-	_camera.init(_screenWidth, _screenHeight);
 
 	_playerDim = glm::vec2(30.0f, 30.0f);
 	_bulletDim = glm::vec2(5.0f, 5.0f);
@@ -34,7 +34,7 @@ void BasicGame::run() {
 
 	initSystems();
 
-	std::string playerData = "1.0f 0.5f|100.0f|20|0|";
+	std::string playerData = _mainPlayer->getData() + "0|";
 	char d[1000];
 	strcpy(d, playerData.c_str());
 	socket->sendBytes(d);
@@ -44,6 +44,25 @@ void BasicGame::run() {
 	gameLoop();
 }
 
+void BasicGame::upDownControl()
+{
+	if (_inputManager.isKeyPressed(SDLK_UP))
+		_mainPlayer->moveUP();
+
+	if (_inputManager.isKeyPressed(SDLK_DOWN))
+		_mainPlayer->moveDOWN();
+}
+
+void BasicGame::rightLeftControl()
+{
+	if (_inputManager.isKeyPressed(SDLK_LEFT))
+		_mainPlayer->moveLEFT();
+
+	if (_inputManager.isKeyPressed(SDLK_RIGHT))
+		_mainPlayer->moveRIGHT();
+}
+
+
 void BasicGame::initSystems() {
 
 	Bengine::init();
@@ -52,12 +71,18 @@ void BasicGame::initSystems() {
 
 	initShaders();
 
+	_camera.init(_screenWidth, _screenHeight);
+
 	_spriteBatch.init();
 	_fpsLimiter.init(_maxFPS);
 
 	for (int i = 0; i < _noOfPlayers; i++)
 	{
-		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1/*, m_leveldata*/);
+		if(i == _currentIndex)
+			std::cout << " client spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
+		else
+			std::cout << " server spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
+		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1, 0/*, m_leveldata*/);
 	}
 
 	_mainPlayer = &(_chars[_currentIndex]);
@@ -112,9 +137,11 @@ void BasicGame::gameLoop() {
 			}
 		}
 
+		updateChars();
+
 		drawGame();
 
-		std::string temp = _mainPlayer->getData() + "|0)";
+		std::string temp = _mainPlayer->getData() + "0|0";
 		char d[1000];
 		strcpy(d, temp.c_str());
 		socket->sendBytes(d);
@@ -131,6 +158,147 @@ void BasicGame::gameLoop() {
 
 
 	}
+}
+
+void BasicGame::updateChars()
+{
+	mtx.lock();
+	std::string tempData = data;
+	mtx.unlock();
+	//std::cout << tempData << std::endl;
+
+	if (tempData == "")
+	{
+		//_mainPlayer->update();
+		return;
+	}
+	int i = 0;
+
+	for (int j = 0; j < _noOfPlayers; j++)
+	{
+		std::string temp = "";
+		//x-coordinate
+		while (tempData[i] != ' ')
+		{
+			temp += tempData[i];
+			i++;
+		}
+		float x = std::stof(temp);
+
+		//y-coordinate
+		i++;
+		temp = "";
+		while (tempData[i] != '|')
+		{
+			temp += tempData[i];
+			i++;
+		}
+		float y = std::stof(temp);
+
+		//health
+		i++;
+		temp = "";
+		while (tempData[i] != '|')
+		{
+			temp += tempData[i];
+			i++;
+		}
+		float health = std::stof(temp);
+
+		//score
+		i++;
+		temp = "";
+		while (tempData[i] != '|')
+		{
+			temp += tempData[i];
+			i++;
+		}
+		int score = std::stof(temp);
+
+		//no. Of Bullets
+		temp = "";
+		i++;
+		while (tempData[i] != '|')
+		{
+			temp += tempData[i];
+			i++;
+		}
+		int numBull = std::stoi(temp);
+
+		//bullet DATA
+		temp = "";
+		i++;
+		for (int z = 0; z < numBull; z++)
+		{
+			//id of the person shooting
+			while (tempData[i] != '|')
+			{
+				temp += tempData[i];
+				i++;
+			}
+			int pID = std::stoi(temp);
+
+			//bulletType
+			i++;
+			temp = "";
+			while (tempData[i] != '|')
+			{
+				temp += tempData[i];
+				i++;
+			}
+			int bType = std::stoi(temp);
+
+			//x position
+			i++;
+			temp = "";
+			while (tempData[i] != ' ')
+			{
+				temp += tempData[i];
+				i++;
+			}
+			float xP = std::stof(temp);
+
+			//y position
+			i++;
+			temp = "";
+			while (tempData[i] != '|')
+			{
+				temp += tempData[i];
+				i++;
+			}
+			float yP = std::stof(temp);
+
+			//x-direction
+			i++;
+			temp = "";
+			while (tempData[i] != ' ')
+			{
+				temp += tempData[i];
+				i++;
+			}
+			float xD = std::stof(temp);
+
+			//y direction
+
+			i++;
+			temp = "";
+			while (tempData[i] != '|')
+			{
+				temp += tempData[i];
+				i++;
+			}
+			float yD = std::stof(temp);
+
+			i++;
+			temp = "";
+
+			//if (pID != _currentIndex)
+				//_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD), _bulletTexID[bType], pID, bType);
+		}
+		if (j != _currentIndex)
+			_chars[j].setData(x, y/*, health, score*/);
+	}
+	//_mainPlayer->update();
 }
 
 void BasicGame::processInput() {
@@ -163,16 +331,16 @@ void BasicGame::processInput() {
 	}
 
 	if (_inputManager.isKeyDown(SDLK_w)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
+		_mainPlayer->moveUP();
 	}
 	if (_inputManager.isKeyDown(SDLK_s)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
+		_mainPlayer->moveDOWN();
 	}
 	if (_inputManager.isKeyDown(SDLK_a)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
+		_mainPlayer->moveLEFT();
 	}
 	if (_inputManager.isKeyDown(SDLK_d)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
+		_mainPlayer->moveRIGHT();
 	}
 	if (_inputManager.isKeyDown(SDLK_q)) {
 		_camera.setScale(_camera.getScale() + SCALE_SPEED);
@@ -186,7 +354,7 @@ void BasicGame::processInput() {
 		mouseCoords = _camera.convertScreenToWorld(mouseCoords);
 		std::cout << mouseCoords.x << " " << mouseCoords.y << std::endl;
 
-		glm::vec2 playerPosition(0.0f);
+		glm::vec2 playerPosition = _mainPlayer->getPosition();
 		glm::vec2 direction = mouseCoords - playerPosition;
 		direction = glm::normalize(direction);    // normalise vector to unit length
 

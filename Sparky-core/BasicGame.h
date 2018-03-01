@@ -41,6 +41,10 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
+	void upDownControl();
+	void rightLeftControl();
+
+	void updateChars();
 
 	void receiver();
 

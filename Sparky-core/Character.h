@@ -29,23 +29,25 @@ enum Person
 	class Character
 	{
 	public:
-		Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed /*, const std::vector<std::string>& levelData*/);
+		Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed, int choice /*, const std::vector<std::string>& levelData*/);
 		~Character();
 		void init();
 		void draw(Bengine::SpriteBatch& spriteBatch);
-		/*void update();
+		void update();
+		/*
 		void addGun(Gun gun);
 		void nextGun();
 		void selectGun(unsigned int n);
 		bool shoot(const glm::vec2& direction, std::vector<Bullet>& bullets);
 		void stopShoot();
+		*/
 		void moveUP();
 		void moveDOWN();
 		void moveRIGHT();
 		void moveLEFT();
-		bool damageTaken(int damage);
+		//bool damageTaken(int damage);
 		//getters
-		*/
+		
 		glm::vec2 getPosition() { return (m_position + glm::vec2(m_dim.x / 2, m_dim.y / 2)); }	//dimension added to get position of the centre of the character
 		float getHealth() { return m_health; }
 		glm::vec2 getDim() { return m_dim; }
@@ -55,7 +57,7 @@ enum Person
 		//std::string getNameScore() { return m_name + "\t\t\t" + std::to_string(m_score); }
 		//setters
 
-		void setData(float x, float y, float health, int score);
+		void setData(float x, float y/*, float health, int score*/);
 		//void increaseScore();
 	private:
 		void respawn();
@@ -70,6 +72,7 @@ enum Person
 		float m_health = 200;
 		float m_mana = 100;
 		int m_score = 0;
+		int m_choice;
 		/*std::vector<std::string> m_levelData;
 		std::vector<Gun> m_guns;
 		int m_currentGunIndex;

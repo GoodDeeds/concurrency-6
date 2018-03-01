@@ -47,6 +47,9 @@ private:
 	void receiver();
 
 	void initialiseLevel(int currentLevel);
+	void upDownControl();
+	void rightLeftControl();
+	//void updateBullets();
 	void updateChars();
 
 	//std::vector<Level*> _levels;
