@@ -282,7 +282,7 @@ void socketServer::select_activity()
 		//else its some IO operation on some other socket :)
 		for (i = 0; i < max_clients; i++)
 		{
-			std::cout << "server data ------------ " << serverData << " i = " << i << std::endl;
+			//std::cout << "server data ------------ " << serverData << " i = " << i << std::endl;
 			if (clients[i] == 0)
 				continue;
 			s = clients[i];

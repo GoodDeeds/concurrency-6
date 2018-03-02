@@ -149,7 +149,7 @@ void BasicGameServer::gameLoop() {
 
 		drawGame();
 
-		std::string temp = _mainPlayer->getData() + "0|1";
+		std::string temp = _mainPlayer->getData() + "0|";
 
 		socket->sendData(temp);
 
@@ -172,7 +172,7 @@ void BasicGameServer::updateChars()
 	mtx.lock();
 	std::string tempData = data;
 	mtx.unlock();
-	std::cout << "temp data  ==  "<<tempData << std::endl;
+	//std::cout << "temp data  ==  "<<tempData << std::endl;
 
 	if (tempData == "")
 	{
@@ -362,6 +362,7 @@ void BasicGameServer::processInput() {
 			break;
 		case SDL_MOUSEMOTION:
 			_inputManager.setMouseCoords(evnt.motion.x, evnt.motion.y);
+			std::cout << "x pos = " << evnt.motion.x << " y = " << evnt.motion.y << std::endl;
 			break;
 		case SDL_KEYDOWN:
 			_inputManager.pressKey(evnt.key.keysym.sym);

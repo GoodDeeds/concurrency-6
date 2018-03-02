@@ -90,7 +90,7 @@ void Character::moveLEFT()
 		if (distance < MIN_WALL_DISTANCE)
 			return; //without updating the position, as the player cannot move any closer than the min distance 
 	}*/
-	m_position += glm::vec2(-m_speed, 0);
+	m_position += glm::vec2(-m_speed, 0.0f);
 	return;
 }
 void Character::moveRIGHT()
@@ -102,6 +102,6 @@ void Character::moveRIGHT()
 		if ((TILE_WIDTH - distance) < MIN_WALL_DISTANCE)
 			return;	//without updating the position, as the player cannot move any closer than the min distance 
 	}*/
-	m_position += glm::vec2(m_speed, 0);
+	m_position += glm::vec2(m_speed, 0.0f);
 	return;
 }
