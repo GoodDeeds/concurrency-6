@@ -51,7 +51,7 @@ private:
 	void rightLeftControl();
 	//void updateBullets();
 	void updateChars();
-
+	void updateBullets();
 	//std::vector<Level*> _levels;
 
 	int _currentLevel;
@@ -76,6 +76,9 @@ private:
 	glm::vec2 _playerDim, _bulletDim;
 	std::vector<Character> _chars;
 	Character* _mainPlayer;
+
+	std::string newBulls = "";
+	int newBullCount = 0;
 
 	float _maxFPS;
 	float _fps;

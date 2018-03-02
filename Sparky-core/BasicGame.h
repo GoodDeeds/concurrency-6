@@ -45,6 +45,7 @@ private:
 	void rightLeftControl();
 
 	void updateChars();
+	void updateBullets();
 
 	void receiver();
 
@@ -73,8 +74,8 @@ private:
 	Character* _mainPlayer;
 
 	int _noOfPlayers, _currentIndex;
-	//std::string newBulls = "";
-	//int newBullCount = 0;
+	std::string newBulls = "";
+	int newBullCount = 0;
 	std::vector<Player> _players;
 
 	socketClient* socket;

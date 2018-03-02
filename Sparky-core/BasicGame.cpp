@@ -34,11 +34,15 @@ void BasicGame::run() {
 
 	initSystems();
 
-	std::string playerData = _mainPlayer->getData() + "0|";
 	char d[1000];
-	strcpy(d, playerData.c_str());
+	strcpy_s(d, _mainPlayer->getData().c_str());
+	newBulls = "0|" + newBulls;
+	strcat_s(d, newBulls.c_str());
+
 	socket->sendBytes(d);
 
+	newBulls = "";
+	newBullCount = 0;
 
 	// only returns when the game ends
 	gameLoop();
@@ -127,7 +131,7 @@ void BasicGame::gameLoop() {
 		_camera.update();
 
 		//Update all bullets
-		for (int i = 0; i < _bullets.size();) {
+		/*for (int i = 0; i < _bullets.size();) {
 			if (_bullets[i].update() == true) {
 				_bullets[i] = _bullets.back();
 				_bullets.pop_back();
@@ -135,16 +139,21 @@ void BasicGame::gameLoop() {
 			else {
 				i++;
 			}
-		}
+		}*/
 
 		updateChars();
-
+		updateBullets();
 		drawGame();
 
-		std::string temp = _mainPlayer->getData() + "0|";
 		char d[1000];
-		strcpy(d, temp.c_str());
+		strcpy_s(d, _mainPlayer->getData().c_str());
+		newBulls = std::to_string(newBullCount) + "|" + newBulls;
+		strcat_s(d, newBulls.c_str());
+
+
 		socket->sendBytes(d);
+		newBulls = "";
+		newBullCount = 0;
 
 		_fps = _fpsLimiter.end();
 
@@ -292,8 +301,10 @@ void BasicGame::updateChars()
 			i++;
 			temp = "";
 
-			//if (pID != _currentIndex)
-				//_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD), _bulletTexID[bType], pID, bType);
+			static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
+
+			if (pID != _currentIndex)
+				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, pID, bType);
 		}
 		if (j != _currentIndex)
 			_chars[j].setData(x, y/*, health, score*/);
@@ -358,10 +369,54 @@ void BasicGame::processInput() {
 		glm::vec2 direction = mouseCoords - playerPosition;
 		direction = glm::normalize(direction);    // normalise vector to unit length
 
-		std::cout << "emitting in direction " << direction.x << " " << direction.y << " " << playerPosition.x << " " << playerPosition.x << std::endl;
-		_bullets.emplace_back(playerPosition, direction, 1.00f, 1000);
+		std::cout << "emitting in direction client " << direction.x << " " << direction.y << " " << playerPosition.x << " " << playerPosition.x << std::endl;
+		//_bullets.emplace_back(playerPosition, direction, 1.00f, 1000);
+		
+		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
+
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, 1, 1);
+
+		newBulls += _bullets[_bullets.size() - 1].getData();
+		newBullCount++;
 	}
 }
+
+void BasicGame::updateBullets()
+{
+	for (int j = 0; j < _noOfPlayers; j++)
+	{
+		for (unsigned int i = 0; i < _bullets.size(); )
+		{
+			glm::vec2 bulPos = _bullets[i].getPosition();
+			glm::vec2 playerPos = _chars[j].getPosition();
+			if (_bullets[i].getPlayerID() == j)
+			{
+				i++;
+				continue;
+			}
+			if (abs(bulPos.x - playerPos.x) < (_playerDim.x / 2 + _bulletDim.x / 2) &&
+				abs(bulPos.y - playerPos.y) < (_playerDim.y / 2 + _bulletDim.y / 2))
+			{
+				/*if (_chars[j].damageTaken(_bullets[i].getDamage()))
+				{
+					if (_bullets[i].getPlayerID() == _currentIndex)
+						_mainPlayer->increaseScore();
+				}*/
+				_bullets[i] = _bullets.back();
+				_bullets.pop_back();
+				continue;
+			}
+			if (_bullets[i].update(/*_leveldata*/))
+			{
+				_bullets[i] = _bullets.back();
+				_bullets.pop_back();
+			}
+			else
+				i++;
+		}
+	}
+}
+
 
 void BasicGame::drawGame() {
 	glClearDepth(1.0);                                     // Setting base depth to 1.0
