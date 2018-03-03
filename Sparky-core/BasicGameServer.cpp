@@ -173,8 +173,6 @@ void BasicGameServer::gameLoop() {
 			std::cout << _fps << std::endl;
 			frameCounter = 0;
 		}
-		
-		
 	}
 }
 
@@ -315,7 +313,8 @@ void BasicGameServer::updateChars()
 
 			if (pID != _currentIndex) {
 				std::cout << " adding bullets " << _bullets.size() << std::endl;
-				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 1.0f, 2000, pID, bType);
+		
+				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.001f, 500, pID, bType, 20);
 			}
 				
 		}
@@ -327,11 +326,12 @@ void BasicGameServer::updateChars()
 	//_mainPlayer->update();
 }
 
+
 void BasicGameServer::updateBullets()
 {
 	for (int j = 0; j < _noOfPlayers; j++)
 	{
-		for (unsigned int i = 0; i < _bullets.size(); )
+		for (unsigned int i = 0; i < _bullets.size();)
 		{
 			glm::vec2 bulPos = _bullets[i].getPosition();
 			glm::vec2 playerPos = _chars[j].getPosition();
@@ -340,22 +340,31 @@ void BasicGameServer::updateBullets()
 				i++;
 				continue;
 			}
-			if (abs(bulPos.x - playerPos.x) < (_playerDim.x / 2 + _bulletDim.x / 2) &&
-				abs(bulPos.y - playerPos.y) < (_playerDim.y / 2 + _bulletDim.y / 2) && !_bullets[i].lifeFinished())
-			{
-				std::cout << "Player damaged " << std::endl;
 
-				if (_chars[j].damageTaken(_bullets[i].getDamage()))
+			std::cout << " remain life " << _bullets[i].remainingLife << std::endl;
+
+			if (_bullets[i].remainingLife == 1)
+			{
+				std::cout << "Lifetime finished " << std::endl;
+
+				if (abs(abs(bulPos.x - playerPos.x) - (_playerDim.x / 2 + _bulletDim.x / 2) ) <= _bullets[i]._radius &&
+					abs(abs(bulPos.y - playerPos.y) - (_playerDim.y / 2 + _bulletDim.y / 2)) <= _bullets[i]._radius)
 				{
-					std::cout << "Player dead " << std::endl;
-					//if (_bullets[i].getPlayerID() == _currentIndex)
+					std::cout << "Player damaged " << std::endl;
+
+					if (_chars[j].damageTaken(_bullets[i].getDamage()))
+					{
+						std::cout << "Player dead " << std::endl;
+						//if (_bullets[i].getPlayerID() == _currentIndex)
 						//_mainPlayer->increaseScore();
+					}
+					_bullets[i] = _bullets.back();
+					_bullets.pop_back();
+					continue;
 				}
-				_bullets[i] = _bullets.back();
-				_bullets.pop_back();
-				continue;
 			}
-			if (_bullets[i].update(/*_leveldata*/))
+
+			if (_bullets[i].update(/*_leveldata*/))         
 			{
 				
 				_bullets[i] = _bullets.back();
@@ -366,8 +375,56 @@ void BasicGameServer::updateBullets()
 		}
 	}
 }
+/*
 
+void BasicGameServer::updateBullets()
+{
+	for (unsigned int i = 0; i < _bullets.size();)
+	{
+		bool ifBulletDamaged = false;
+		for (int j = 0; j < _noOfPlayers; j++)
+		{
+			glm::vec2 bulPos = _bullets[i].getPosition();
+			glm::vec2 playerPos = _chars[j].getPosition();
 
+			if (_bullets[i].remainingLife == 1)
+			{
+				std::cout << "Lifetime finished " << std::endl;
+
+				if (abs(abs(bulPos.x - playerPos.x) - (_playerDim.x / 2 + _bulletDim.x / 2)) <= _bullets[i]._radius &&
+					abs(abs(bulPos.y - playerPos.y) - (_playerDim.y / 2 + _bulletDim.y / 2)) <= _bullets[i]._radius)
+				{
+					ifBulletDamaged = true;
+
+					std::cout << "Player damaged = " << j <<  std::endl;
+
+					if (_chars[j].damageTaken(_bullets[i].getDamage()))
+					{
+						std::cout << "Player dead " << std::endl;
+						//if (_bullets[i].getPlayerID() == _currentIndex)
+						//_mainPlayer->increaseScore();
+					}
+					
+				}
+			}
+		}
+		if (ifBulletDamaged)
+		{
+			_bullets[i] = _bullets.back();
+			_bullets.pop_back();
+			ifBulletDamaged = false;
+			continue;
+		}
+		if (_bullets[i].update())
+		{
+			_bullets[i] = _bullets.back();
+			_bullets.pop_back();
+		}
+		else
+			i++;
+	}
+}
+*/
 
 void BasicGameServer::processInput() {
 	SDL_Event evnt;
@@ -432,7 +489,8 @@ void BasicGameServer::processInput() {
 	
 		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bubble_Big.png");
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.0f, 2000, _currentIndex, 1);
+
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.001f, 500, _currentIndex, 1, 20);
 
 			newBulls += _bullets[_bullets.size() - 1].getData();
 			newBullCount++;
