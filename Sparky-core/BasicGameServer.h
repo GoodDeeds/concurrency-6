@@ -63,6 +63,8 @@ private:
 	GameState1 _gameState;
 
 
+
+
 	Bengine::GLSLProgram _colorProgram;
 	Bengine::Camera2D _camera;
 
@@ -73,12 +75,23 @@ private:
 
 	std::vector<Bullet> _bullets;
 
+	glm::vec2 _heartPos;
+	glm::vec2 _heartDim = glm::vec2(10, 10);
+
+
+
+	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;
+
+	glm::vec4 _uv = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	Bengine::Color _color = { 255,255,255,255 };
+
 	glm::vec2 _playerDim, _bulletDim;
 	std::vector<Character> _chars;
 	Character* _mainPlayer;
 
 	std::string newBulls = "";
 	int newBullCount = 0;
+
 
 	float _maxFPS;
 	float _fps;

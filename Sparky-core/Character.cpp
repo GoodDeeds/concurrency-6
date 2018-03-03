@@ -14,11 +14,11 @@ Character::Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim,
 	m_position = pos;
 	m_person = person;
 	m_dim = dim;
-	//m_texId[NOTSHOOTING] = ResourceManager::getTexture(m_filePaths[m_person]).id;
-	//m_texId[SHOOTING] = ResourceManager::getTexture(m_filePaths2[m_person]).id;
+	m_texId[NOTSHOOTING] = Bengine::ResourceManager::getTexture(m_filePaths[m_person]).id;
+	m_texId[SHOOTING] =Bengine::ResourceManager::getTexture(m_filePaths2[m_person]).id;
 	m_speed = speed;
 	//m_levelData = levelData;
-	//m_state = NOTSHOOTING;
+	m_state = NOTSHOOTING;
 	m_choice = choice;
 }
 
@@ -49,11 +49,28 @@ void Character::draw(Bengine::SpriteBatch& spriteBatch)
 {
 	static Bengine::GLTexture texture;
 
-	if(m_choice == 1)
 		texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-	else
-		texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/HearthEnemy1.png");
-	spriteBatch.draw(glm::vec4(m_position.x, m_position.y, m_dim.x, m_dim.y), m_uv, texture.id, 0.0f, m_color);
+	spriteBatch.draw(glm::vec4(m_position.x, m_position.y, m_dim.x, m_dim.y), m_uv, m_texId[m_state], 0.0f, m_color);
+}
+
+void Character::respawn()
+{
+	m_health = 200;
+	int x = rand() % RESPAWN_PLACES;
+	m_position = respawnPosition[x];
+}
+
+
+bool Character::damageTaken(int damage)
+{
+	m_health -= damage;
+	if (m_health <= 0)
+	{
+		std::cout << m_name << " DEAD" << std::endl;
+		respawn();
+		return true;
+	}
+	return false;
 }
 
 

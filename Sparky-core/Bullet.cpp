@@ -41,10 +41,18 @@ void Bullet::draw(Bengine::SpriteBatch& spriteBatch) {
 }
 
 bool Bullet::update() {
-	_position += _direction * _speed;
+	//_position += _direction * _speed;
 	_lifeTime--;
 	if (_lifeTime == 0) {
 		return true;
 	}
 	return false;
+}
+
+bool Bullet::lifeFinished() {
+	if (_lifeTime <= 0) {
+		return true;
+	}
+	else
+		return false;
 }

@@ -6,8 +6,8 @@
 //#include "Gun.h"
 #include "Bullet.h"
 
-/*
-const int MIN_WALL_DISTANCE = 2;
+
+//const int MIN_WALL_DISTANCE = 2;
 const int RESPAWN_PLACES = 4;
 
 enum State
@@ -15,6 +15,7 @@ enum State
 	NOTSHOOTING = 0,
 	SHOOTING = 1
 };
+/*
 enum Person
 {
 	HARRY = 0,
@@ -45,7 +46,7 @@ enum Person
 		void moveDOWN();
 		void moveRIGHT();
 		void moveLEFT();
-		//bool damageTaken(int damage);
+		bool damageTaken(int damage);
 		//getters
 		
 		glm::vec2 getPosition() { return (m_position + glm::vec2(m_dim.x / 2, m_dim.y / 2)); }	//dimension added to get position of the centre of the character
@@ -76,9 +77,11 @@ enum Person
 		/*std::vector<std::string> m_levelData;
 		std::vector<Gun> m_guns;
 		int m_currentGunIndex;
-		std::string m_filePaths[6] = { "../Harry/Textures/harryPotter/Harry/harry.png","../Harry/Textures/harryPotter/Ron/ron.png","../Harry/Textures/harryPotter/Hermoine/hermoine.png","../Harry/Textures/harryPotter/Ginny/ginny.png","../Harry/Textures/harryPotter/Malfoy/malfoy.png","../Harry/Textures/harryPotter/Luna/luna.png" };
-		std::string m_filePaths2[6] = { "../Harry/Textures/harryPotter/Harry/harry2.png","../Harry/Textures/harryPotter/Ron/ron2.png","../Harry/Textures/harryPotter/Hermoine/hermoine2.png","../Harry/Textures/harryPotter/Ginny/ginny2.png","../Harry/Textures/harryPotter/Malfoy/malfoy2.png","../Harry/Textures/harryPotter/Luna/luna2.png" };
-		glm::vec2 respawnPosition[RESPAWN_PLACES] = { glm::vec2(130.0f,30.0f),glm::vec2(150.0f,30.0f), glm::vec2(150.0f,50.0f), glm::vec2(170.0f,70.0f) };
 		*/
+		std::string m_filePaths[6] = { "../Sparky-core/Textures/harryPotter/Harry/harry.png","../Sparky-core/Textures/harryPotter/Ron/ron.png","../Sparky-core/Textures/harryPotter/Hermoine/hermoine.png","../Sparky-core/Textures/harryPotter/Ginny/ginny.png","../Sparky-core/Textures/harryPotter/Malfoy/malfoy.png","../Sparky-core/Textures/harryPotter/Luna/luna.png" };
+		std::string m_filePaths2[6] = { "../Sparky-core/Textures/harryPotter/Harry/harry2.png","../Sparky-core/Textures/harryPotter/Ron/ron2.png","../Sparky-core/Textures/harryPotter/Hermoine/hermoine2.png","../Sparky-core/Textures/harryPotter/Ginny/ginny2.png","../Sparky-core/Textures/harryPotter/Malfoy/malfoy2.png","../Sparky-core/Textures/harryPotter/Luna/luna2.png" };
+		//glm::vec2 respawnPosition[RESPAWN_PLACES] = { glm::vec2(130.0f,30.0f),glm::vec2(150.0f,30.0f), glm::vec2(150.0f,50.0f), glm::vec2(170.0f,70.0f) };
+		
+		glm::vec2 respawnPosition[RESPAWN_PLACES] = { glm::vec2(130.0f,30.0f),glm::vec2(150.0f,30.0f), glm::vec2(150.0f,50.0f), glm::vec2(170.0f,70.0f) };
 	};
 

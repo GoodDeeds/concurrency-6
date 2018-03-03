@@ -90,6 +90,13 @@ void BasicGame::initSystems() {
 	}
 
 	_mainPlayer = &(_chars[_currentIndex]);
+
+	_heartTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/heart.png").id;
+	_wandTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/wand.png").id;
+	_redTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/red.png").id;
+	_blueTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/blue.png").id;
+	_grayTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/gray.png").id;
+
 }
 
 void BasicGame::receiver()
@@ -301,10 +308,10 @@ void BasicGame::updateChars()
 			i++;
 			temp = "";
 
-			static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
+			static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bubble_Big.png");
 
 			if (pID != _currentIndex)
-				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, pID, bType);
+				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.0f, 2000, pID, bType);
 		}
 		if (j != _currentIndex)
 			_chars[j].setData(x, y/*, health, score*/);
@@ -372,9 +379,9 @@ void BasicGame::processInput() {
 		std::cout << "emitting in direction client " << direction.x << " " << direction.y << " " << playerPosition.x << " " << playerPosition.x << std::endl;
 		//_bullets.emplace_back(playerPosition, direction, 1.00f, 1000);
 		
-		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
+		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bubble_Big.png");
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, _currentIndex, 1);
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.0f, 2000, _currentIndex, 1);
 
 		newBulls += _bullets[_bullets.size() - 1].getData();
 		newBullCount++;
@@ -395,13 +402,16 @@ void BasicGame::updateBullets()
 				continue;
 			}
 			if (abs(bulPos.x - playerPos.x) < (_playerDim.x / 2 + _bulletDim.x / 2) &&
-				abs(bulPos.y - playerPos.y) < (_playerDim.y / 2 + _bulletDim.y / 2))
+				abs(bulPos.y - playerPos.y) < (_playerDim.y / 2 + _bulletDim.y / 2) && !_bullets[i].lifeFinished())
 			{
-				/*if (_chars[j].damageTaken(_bullets[i].getDamage()))
+				std::cout << "Player damaged " << std::endl;
+
+				if (_chars[j].damageTaken(_bullets[i].getDamage()))
 				{
-					if (_bullets[i].getPlayerID() == _currentIndex)
-						_mainPlayer->increaseScore();
-				}*/
+					std::cout << " Player Dead " << std::endl;
+					//if (_bullets[i].getPlayerID() == _currentIndex)
+						//_mainPlayer->increaseScore();
+				}
 				_bullets[i] = _bullets.back();
 				_bullets.pop_back();
 				continue;
@@ -462,6 +472,18 @@ void BasicGame::drawGame() {
 	{
 		_chars[i].draw(_spriteBatch);
 	}
+
+
+	float health = _mainPlayer->getHealth();
+	float mana = 200;// _mainPlayer->getMana();
+	_heartPos = _camera.convertScreenToWorld(glm::vec2(40.0f, 40.0f));
+	_spriteBatch.draw(glm::vec4(_heartPos.x, _heartPos.y, _heartDim.x, _heartDim.y), _uv, _heartTexID, 5, _color);
+	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x, _heartPos.y, health / 4, _heartDim.y), _uv, _redTexID, 5, _color);
+	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x + health / 4, _heartPos.y, 50.0f - health / 4, _heartDim.y), _uv, _grayTexID, 5, _color);
+	_spriteBatch.draw(glm::vec4(_heartPos.x, _heartPos.y - 2 * _heartDim.y, _heartDim.x, _heartDim.y), _uv, _wandTexID, 5, _color);
+	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x, _heartPos.y - 2 * _heartDim.y, mana / 2, _heartDim.y), _uv, _blueTexID, 5, _color);
+	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x + mana / 2, _heartPos.y - 2 * _heartDim.y, 50.0f - mana / 2, _heartDim.y), _uv, _grayTexID, 5, _color);
+
 
 	_spriteBatch.end();
 
