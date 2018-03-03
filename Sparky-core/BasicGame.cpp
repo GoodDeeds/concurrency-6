@@ -374,7 +374,7 @@ void BasicGame::processInput() {
 		
 		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, 1, 1);
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, _currentIndex, 1);
 
 		newBulls += _bullets[_bullets.size() - 1].getData();
 		newBullCount++;

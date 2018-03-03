@@ -306,8 +306,11 @@ void BasicGameServer::updateChars()
 
 			static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
 
-			if (pID != _currentIndex)
+			if (pID != _currentIndex) {
+				std::cout << " adding bullets " << _bullets.size() << std::endl;
 				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, pID, bType);
+			}
+				
 		}
 		
 		if (j != _currentIndex)
@@ -418,10 +421,10 @@ void BasicGameServer::processInput() {
 	
 		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bullet.png");
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, 2, 1);
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 1.0f, 1000, _currentIndex, 1);
 
-		newBulls += _bullets[_bullets.size() - 1].getData();
-		newBullCount++;
+			newBulls += _bullets[_bullets.size() - 1].getData();
+			newBullCount++;
 	
 	}
 }
