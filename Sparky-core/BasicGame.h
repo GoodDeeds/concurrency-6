@@ -26,7 +26,7 @@
 
 enum class GameState2 { PLAY, EXIT };
 
-class BasicGame
+class BasicGame:public BrickExplode
 {
 public:
 	BasicGame(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketClient* sockClient);
@@ -73,6 +73,7 @@ private:
 	std::vector<BrickExplode> _bricks;
 
 	void updateBricks();
+
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;
 

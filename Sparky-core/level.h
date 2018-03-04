@@ -3,15 +3,18 @@
 #include <vector>
 #include <Bengine/SpriteBatch.h>
 
-const int TILE_WIDTH = 240;
+const int TILE_WIDTH = 20;
+
 
 class Level
 {
 public:
+	Level();
 	Level(const std::string &fileName, int screenWidth, int screenHeight);
 	~Level();
 
 	void draw();
+
 
 	//glm::vec2 getStartPlayerPos() const { return _playerStartPos; }
 
@@ -23,8 +26,15 @@ public:
 
 	//const int getWidth() const { return _levelData[0].size(); }
 	//const int getHeight() const { return _levelData.size(); }
+
+	
+
 private:
+	
 	std::vector<std::string> _levelData;
+
+	
+
 	//int _numHumans;
 	Bengine::SpriteBatch _spriteBatch;
 	GLuint grassTexid;

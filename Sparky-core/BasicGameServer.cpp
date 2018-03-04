@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <cmath>
+#include <fstream>
 
 
 BasicGameServer::BasicGameServer(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketServer* sockServer)
@@ -70,7 +71,42 @@ void BasicGameServer::initSystems() {
 
 	initShaders();
 
-	for (int i = 0; i < 5; i++) {
+
+	/*
+	std::vector<glm::vec2> t_brickPosition;
+
+	std::vector<std::string> t_levelData;
+
+	glm::vec2 t_dim = glm::vec2(25.0f, 25.0f);
+	bool t_toshow = true;
+
+	std::ifstream t_file;
+	std::string t_fileName = "../Sparky-core/Levels/level1.txt";
+	t_file.open(t_fileName);
+	if (t_file.fail()) {
+		Bengine::fatalError("ohMyGOD!!! The " + t_fileName + " level could not be loaded!");
+	}
+
+
+	std::string tmp;
+	while (std::getline(t_file, tmp)) {
+		t_levelData.push_back(tmp);
+	}
+
+
+	for (int y = 0; y < t_levelData.size(); y++) {
+		for (int x = 0; x < t_levelData[y].size(); x++) {
+
+			if (t_levelData[y][x] == 'B')
+			{
+				std::cout << "adding x = " << x << " adding y = " << y << std::endl;
+				t_brickPosition.push_back(glm::vec2(x, y));
+			}
+		}
+	}
+
+	*/
+	for (int i = 0; i < 39; i++) {
 		_bricks.emplace_back(i);
 	}
 
@@ -88,7 +124,7 @@ void BasicGameServer::initSystems() {
 			std::cout << " server spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
 		else
 			std::cout << " client spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
-			_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1 , 0 /*, _leveldata*/);
+			_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 10 , 0 /*, _leveldata*/);
 		//else
 		//	_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1, 1 /*, _leveldata*/);
 	}
@@ -388,8 +424,12 @@ void BasicGameServer::updateBullets()
 
 				for (int z = 0; z < _bricks.size(); z++)
 				{
-					glm::vec2 diff = (_mainPlayer->getPosition() - _bricks[z].getPosition());
-					if (abs(diff.x) <= 30.0f && abs(diff.y) <= 30.0f && _bricks[z].getVisibility())
+					//here 20.0f is the tile width
+					float diffX = abs(bulPos.x - _bricks[z].getPosition().x * 20.0f);
+					float diffY = abs(bulPos.y - _bricks[z].getPosition().y * 20.0f);
+
+
+					if (diffX <= 30.0f && diffY <= 30.0f && _bricks[z].getVisibility())
 					{
 						_mainPlayer->setBrickToPop(z);
 						std::cout << "Popping " << std::endl;

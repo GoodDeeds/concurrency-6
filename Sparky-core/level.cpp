@@ -6,7 +6,10 @@
 #include <glm/glm.hpp>
 
 
+Level::Level()
+{
 
+}
 Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 
 	//grassTexid = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/grass.png").id;
@@ -35,9 +38,9 @@ Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 
 	_spriteBatch.init();
 	_spriteBatch.begin();
-
-	for (unsigned int y = 0; y < _levelData.size(); y++) {
-		for (unsigned int x = 0; x < _levelData[y].size(); x++) {
+	int count = 0;
+	for (int y = 0; y < _levelData.size(); y++) {
+		for (int x = 0; x < _levelData[y].size(); x++) {
 
 			char tile = _levelData[y][x];
 			glm::vec4 destRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
@@ -60,17 +63,19 @@ Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 				break;
 			case 'B':
 				std::cout << "rendering B " << std::endl;
-				_spriteBatch.draw(destRect,
+				count++;
+				/*_spriteBatch.draw(destRect,
 					uvRect,
 					Bengine::ResourceManager::getTexture("../Sparky-core/Textures/light_bricks.png").id,
 					0.0f,
 					color);
+				*/
 				break;
 			case '@':
 				std::cout << "rendering @ " << std::endl;
 				//_playerStartPos.x = x * TILE_WIDTH;
 				//_playerStartPos.y = y * TILE_WIDTH;
-				_levelData[x][y] = '.'; //Homogenize our collision cases
+				//_levelData[x][y] = '.'; //Homogenize our collision cases
 				break;
 			case 'Z':
 				std::cout << "rendering Z " << std::endl;
@@ -83,9 +88,12 @@ Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 
 		}
 	}
+	std::cout << "bricks = " << count << std::endl;
+
 	_spriteBatch.end();
 	file.close();
 }
+
 
 
 Level::~Level()

@@ -1,14 +1,50 @@
 #include "BrickExplode.h"
 #include <iostream>
 #include <Bengine/ResourceManager.h>
+#include <fstream>
+#include <Bengine/Errors.h>
+
+
+BrickExplode::BrickExplode()
+{
+}
 
 BrickExplode::BrickExplode(int index)
 {
 	_index = index;
+	
+		_dim = glm::vec2(25.0f, 25.0f);
+		_toshow = true;
+
+		std::ifstream file;
+		std::string fileName = "../Sparky-core/Levels/level1.txt";
+		file.open(fileName);
+		if (file.fail()) {
+			Bengine::fatalError("ohMyGOD!!! The " + fileName + " level could not be loaded!");
+		}
+
+
+		std::string tmp;
+		while (std::getline(file, tmp)) {
+			_levelData.push_back(tmp);
+		}
+
+
+		for (int y = 0; y < _levelData.size(); y++) {
+			for (int x = 0; x < _levelData[y].size(); x++) {
+
+				if (_levelData[y][x] == 'B')
+				{
+					std::cout << "adding x = " << x << " adding y = " << y << std::endl;
+					brickPosition.push_back(glm::vec2(x, y));
+				}
+			}
+		}
+	
+	
 	_position = brickPosition[index];
-	_dim = glm::vec2(25.0f, 25.0f);
-	_toshow = true;
 }
+
 
 
 BrickExplode::~BrickExplode()
@@ -40,5 +76,5 @@ void BrickExplode::draw(Bengine::SpriteBatch& spriteBatch) {
 	//spriteBatch.draw(posAndSize, uv, texture.id, 0.0f, color);
 
 	//the dimensions of bullet has been subtracted to centre the bullet
-	spriteBatch.draw(glm::vec4(_position.x - _dim.x / 2, _position.y - _dim.y / 2, _dim.x, _dim.y), uv, texture.id, 0.0f, color);
+	spriteBatch.draw(glm::vec4((_position.x /*- _dim.x / 2*/ ) * 20, (_position.y /*- _dim.y / 2*/) * 20, _dim.x, _dim.y), uv, texture.id, 0.0f, color);
 }

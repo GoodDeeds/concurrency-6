@@ -16,7 +16,7 @@
 #include <Bengine/SpriteBatch.h> 
 
 #include <Bengine/Camera2D.h>
-#include"level.h"
+#include "level.h"
 #include "Bullet.h"
 #include "player.h"
 #include "Sockets.h"
@@ -33,6 +33,7 @@ public:
 	~BasicGameServer();
 
 	void run();                   // to run our game
+
 
 
 
@@ -60,6 +61,8 @@ private:
 	std::vector<std::string> _leveldata;
 
 	std::vector<BrickExplode> _bricks;
+
+	
 
 	void updateBricks();
 
