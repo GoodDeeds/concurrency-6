@@ -21,6 +21,7 @@
 #include "player.h"
 #include "Sockets.h"
 #include "Character.h"
+#include "BrickExplode.h"
 #include <mutex>
 
 enum class GameState1 { PLAY, EXIT };
@@ -57,6 +58,10 @@ private:
 
 	int _currentLevel;
 	std::vector<std::string> _leveldata;
+
+	std::vector<BrickExplode> _bricks;
+
+	void updateBricks();
 
 	Bengine::Window  _window;
 	int _screenWidth;

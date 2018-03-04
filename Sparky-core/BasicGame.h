@@ -21,6 +21,7 @@
 #include "player.h"
 #include "Sockets.h"
 #include "Character.h"
+#include "BrickExplode.h"
 #include <mutex>
 
 enum class GameState2 { PLAY, EXIT };
@@ -69,6 +70,9 @@ private:
 	glm::vec2 _heartDim = glm::vec2(10, 10);
 	std::vector<std::string> _leveldata;
 
+	std::vector<BrickExplode> _bricks;
+
+	void updateBricks();
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;
 

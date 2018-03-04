@@ -69,6 +69,11 @@ void BasicGameServer::initSystems() {
 	_window.create("Server", _screenWidth, _screenHeight, 0);
 
 	initShaders();
+
+	for (int i = 0; i < 5; i++) {
+		_bricks.emplace_back(i);
+	}
+
 	initLevels(_currentLevel);
 	_camera.init(_screenWidth, _screenHeight);
 
@@ -161,6 +166,8 @@ void BasicGameServer::gameLoop() {
 		updateChars();
 		updateBullets();
 
+		//updateBricks();
+
 		drawGame();
 
 		std::string temp = _mainPlayer->getData() + std::to_string(newBullCount) + "|" + newBulls;
@@ -181,6 +188,22 @@ void BasicGameServer::gameLoop() {
 			frameCounter = 0;
 		}
 	}
+}
+
+void BasicGameServer::updateBricks()
+{
+	/*for (int i = 0; i < _bricks.size(); i++)
+	{
+		glm::vec2 diff = (_mainPlayer->getPosition() - _bricks[i].getPosition());
+		if (abs(diff.x) <= 30.0f && abs(diff.y) <= 30.0f && _bricks[i].getVisibility())
+		{
+			_mainPlayer->setBrickToPop(i);
+			std::cout << "Popping " << std::endl;
+			break;
+		}
+		else
+			_mainPlayer->setBrickToPop(-1);
+	}*/
 }
 
 void BasicGameServer::updateChars()
@@ -237,7 +260,15 @@ void BasicGameServer::updateChars()
 			temp += tempData[i];
 			i++;
 		}
-		int score = std::stof(temp);
+		int brickToPop = std::stoi(temp);
+		
+		if (_bricks.size() > 0 && brickToPop != -1 && brickToPop < _bricks.size())
+		{
+			std::cout << "setting" << std::endl;
+
+			_bricks[brickToPop].setVisibility(false);
+			
+		}
 
 		//no. Of Bullets
 		temp = "";
@@ -353,6 +384,20 @@ void BasicGameServer::updateBullets()
 			if (_bullets[i].remainingLife == 1)
 			{
 				std::cout << "Lifetime finished " << std::endl;
+				
+
+				for (int z = 0; z < _bricks.size(); z++)
+				{
+					glm::vec2 diff = (_mainPlayer->getPosition() - _bricks[z].getPosition());
+					if (abs(diff.x) <= 30.0f && abs(diff.y) <= 30.0f && _bricks[z].getVisibility())
+					{
+						_mainPlayer->setBrickToPop(z);
+						std::cout << "Popping " << std::endl;
+						break;
+					}
+					else
+						_mainPlayer->setBrickToPop(-1);
+				}
 
 				if (abs(abs(bulPos.x - playerPos.x) - (_playerDim.x / 2 + _bulletDim.x / 2) ) <= _bullets[i]._radius &&
 					abs(abs(bulPos.y - playerPos.y) - (_playerDim.y / 2 + _bulletDim.y / 2)) <= _bullets[i]._radius)
@@ -543,6 +588,11 @@ void BasicGameServer::drawGame() {
 
 	for (int i = 0; i < _bullets.size(); i++) {
 		_bullets[i].draw(_spriteBatch);
+	}
+
+	for (int i = 0; i < _bricks.size(); i++) {
+		if(_bricks[i].getVisibility())
+			_bricks[i].draw(_spriteBatch);
 	}
 
 	//for drawing the clients

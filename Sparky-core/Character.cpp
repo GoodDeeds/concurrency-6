@@ -20,6 +20,7 @@ Character::Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim,
 	//m_levelData = levelData;
 	m_state = NOTSHOOTING;
 	m_choice = choice;
+	m_score = -1;
 }
 
 void Character::init()
@@ -39,9 +40,14 @@ void Character::setData(float x, float y /*, float health, int score*/)
 }
 
 
+void Character::setBrickToPop(int index) {
+	std::cout << " doing "<< index << std::endl;
+	m_score = index;
+}
+
 std::string Character::getData()
 {
-	std::string result = std::to_string(m_position.x) + " " + std::to_string(m_position.y) + "|" + std::to_string(m_health) + "|" + std::to_string(m_score) + "|";
+	std::string result = std::to_string(m_position.x) + " " + std::to_string(m_position.y) + "|" + std::to_string(m_health) + "|"  +std::to_string(m_score) + "|";
 	return result;
 }
 

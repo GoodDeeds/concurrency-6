@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="BasicGame.cpp" />
     <ClCompile Include="BasicGameServer.cpp" />
+    <ClCompile Include="BrickExplode.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="level.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="BasicGame.h" />
     <ClInclude Include="BasicGameServer.h" />
+    <ClInclude Include="BrickExplode.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="level.h" />
