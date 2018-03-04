@@ -13,7 +13,7 @@
 
 
 BasicGame::BasicGame(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketClient* sockClient)
-	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState2::PLAY), _maxFPS(60.0f)
+	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState2::PLAY), _maxFPS(60.0f),_currentLevel(0)
 
 {
 	socket = sockClient;
@@ -76,10 +76,10 @@ void BasicGame::initSystems() {
 	initShaders();
 
 	_camera.init(_screenWidth, _screenHeight);
-
+	initLevels(_currentLevel);
 	_spriteBatch.init();
 	_fpsLimiter.init(_maxFPS);
-
+	_leveldata = _levels[_currentLevel]->getLevelData();
 	for (int i = 0; i < _noOfPlayers; i++)
 	{
 		if(i == _currentIndex)
@@ -119,7 +119,10 @@ void BasicGame::initShaders() {
 	_colorProgram.addAttribute("vertexUV");
 	_colorProgram.linkShaders();
 }
-
+void BasicGame::initLevels(int level) {
+	_levels.push_back(new Level("../Sparky-core/Levels/level" + std::to_string(level + 1) + ".txt", _screenWidth, _screenHeight));
+	std::cout << "level is pushed back" << std::endl;
+}
 void BasicGame::gameLoop() {
 
 	while (_gameState != GameState2::EXIT) {
@@ -511,7 +514,7 @@ void BasicGame::drawGame() {
 
 	//loading the matrix to the GPU
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
-
+	_levels[_currentLevel]->draw();
 	_spriteBatch.begin();
 
 	/*glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);

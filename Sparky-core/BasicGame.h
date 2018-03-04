@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 
 #include <vector>
-
+#include"level.h"
 #include <Bengine/Bengine.h>
 #include <Bengine/GLSLProgram.h>
 #include <Bengine/Sprite.h>
@@ -38,6 +38,7 @@ public:
 private:
 	void initSystems();           // to initialise opengl and sdl and our game window
 	void initShaders();
+	void initLevels(int level);
 	void processInput();
 	void gameLoop();
 	void drawGame();
@@ -52,6 +53,7 @@ private:
 	Bengine::Window  _window;
 	int _screenWidth;
 	int _screenHeight;
+	int _currentLevel;
 	GameState2 _gameState;
 
 
@@ -62,10 +64,10 @@ private:
 
 	Bengine::InputManager _inputManager;
 	Bengine::FpsLimiter _fpsLimiter;
-
+	std::vector<Level*> _levels;
 	glm::vec2 _heartPos;
 	glm::vec2 _heartDim = glm::vec2(10, 10);
-
+	std::vector<std::string> _leveldata;
 
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;

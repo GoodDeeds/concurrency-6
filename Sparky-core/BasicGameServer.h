@@ -16,7 +16,7 @@
 #include <Bengine/SpriteBatch.h> 
 
 #include <Bengine/Camera2D.h>
-
+#include"level.h"
 #include "Bullet.h"
 #include "player.h"
 #include "Sockets.h"
@@ -40,13 +40,14 @@ private:
 
 	void initSystems();           // to initialise opengl and sdl and our game window
 	void initShaders();
+	void initLevels();
 	void processInput();
 	void gameLoop();
 	void drawGame();
 
 	void receiver();
 
-	void initialiseLevel(int currentLevel);
+	void initLevels(int currentLevel);
 	void upDownControl();
 	void rightLeftControl();
 	//void updateBullets();
@@ -60,6 +61,7 @@ private:
 	Bengine::Window  _window;
 	int _screenWidth;
 	int _screenHeight;
+	//int _currentLevel;
 	GameState1 _gameState;
 
 
@@ -77,7 +79,7 @@ private:
 
 	glm::vec2 _heartPos;
 	glm::vec2 _heartDim = glm::vec2(10, 10);
-
+	std::vector<Level*> _levels;
 
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;

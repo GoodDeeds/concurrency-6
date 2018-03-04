@@ -10,7 +10,7 @@
 
 
 BasicGameServer::BasicGameServer(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketServer* sockServer)
-	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState1::PLAY), _maxFPS(60.0f)
+	:_screenWidth(800), _screenHeight(600), _time(0.0f), _gameState(GameState1::PLAY), _maxFPS(60.0f),_currentLevel(0)
 {
 	
 	socket = sockServer;
@@ -69,14 +69,14 @@ void BasicGameServer::initSystems() {
 	_window.create("Server", _screenWidth, _screenHeight, 0);
 
 	initShaders();
-
+	initLevels(_currentLevel);
 	_camera.init(_screenWidth, _screenHeight);
 
 	_spriteBatch.init();
 	_fpsLimiter.init(_maxFPS);
 
 
-	//_leveldata = _levels[m_currentLevel]->getLevelData();
+	_leveldata = _levels[_currentLevel]->getLevelData();
 	for (int i = 0; i < _noOfPlayers; i++)
 	{
 		if (i == _currentIndex)
@@ -97,6 +97,12 @@ void BasicGameServer::initSystems() {
 	_blueTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/blue.png").id;
 	_grayTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/gray.png").id;
 
+}
+void BasicGameServer::initLevels(int level) {
+	//_levels.push_back(new Level("../Sparky-core/Levels/level" + std::to_string(level + 1) + ".txt", _screenWidth, _screenHeight));
+	_levels.push_back(new Level("../Sparky-core/Levels/level1.txt", _screenWidth, _screenHeight));
+
+	std::cout << "level is pushed back" << std::endl;
 }
 
 void BasicGameServer::receiver()
@@ -122,6 +128,7 @@ void BasicGameServer::initShaders() {
 	_colorProgram.addAttribute("vertexUV");
 	_colorProgram.linkShaders();
 }
+
 
 void BasicGameServer::gameLoop() {
 
@@ -516,7 +523,7 @@ void BasicGameServer::drawGame() {
 
 	//loading the matrix to the GPU
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
-
+	_levels[_currentLevel]->draw();
 	_spriteBatch.begin();
 
 	/*glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);

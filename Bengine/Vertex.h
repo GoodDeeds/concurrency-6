@@ -9,13 +9,17 @@ namespace Bengine {
 		float y;
 	};
 
-	struct Color {                               //GLubyte same as unsigned char = 1 byte as 0< each color value <255, only 3 is needed but 4 to make size multiple of 4
+	struct Color {
+		Color() : r(0), g(0), b(0), a(0) { }
+		Color(GLubyte R, GLubyte G, GLubyte B, GLubyte A) :
+			r(R), g(G), b(B), a(A) { }
 		GLubyte r;
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
-	};
 
+		void set(GLubyte red, GLubyte grn, GLubyte blu, GLubyte alp) { r = red; g = grn; b = blu; a = alp; }
+	};
 	struct UV {
 		float u;
 		float v;
@@ -44,5 +48,6 @@ namespace Bengine {
 			uv.u = u;
 			uv.v = v;
 		}
+		//void setPosition(float x, float y) { position.x = x; position.y = y; }
 	};
 }

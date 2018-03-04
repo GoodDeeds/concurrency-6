@@ -140,6 +140,7 @@
     <ClCompile Include="BasicGameServer.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sockets.cpp" />
   </ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="BasicGameServer.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="level.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="Sockets.h" />
   </ItemGroup>
