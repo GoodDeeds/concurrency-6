@@ -9,11 +9,12 @@ BrickExplode::BrickExplode()
 {
 }
 
-BrickExplode::BrickExplode(int index)
+
+BrickExplode::BrickExplode(int index/*, glm::vec2 brickPosition*/)
 {
 	_index = index;
 	
-		_dim = glm::vec2(25.0f, 25.0f);
+		_dim = glm::vec2(20.0f, 20.0f);
 		_toshow = true;
 
 		std::ifstream file;
@@ -36,7 +37,7 @@ BrickExplode::BrickExplode(int index)
 				if (_levelData[y][x] == 'B')
 				{
 					std::cout << "adding x = " << x << " adding y = " << y << std::endl;
-					brickPosition.push_back(glm::vec2(x, y));
+					brickPosition.push_back(glm::vec2(y, x));
 				}
 			}
 		}
@@ -64,7 +65,7 @@ void BrickExplode::setVisibility(bool SetValue)
 
 void BrickExplode::draw(Bengine::SpriteBatch& spriteBatch) {
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/red_bricks.png");
+	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/light_bricks.png");
 	Bengine::Color color;
 	color.r = 255;
 	color.g = 255;

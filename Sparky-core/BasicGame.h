@@ -22,6 +22,7 @@
 #include "Sockets.h"
 #include "Character.h"
 #include "BrickExplode.h"
+#include "explosion.h"
 #include <mutex>
 
 enum class GameState2 { PLAY, EXIT };
@@ -47,6 +48,7 @@ private:
 	void rightLeftControl();
 
 	void updateChars();
+	void updateExplosions();
 	void updateBullets();
 
 	void receiver();
@@ -71,6 +73,7 @@ private:
 	std::vector<std::string> _leveldata;
 
 	std::vector<BrickExplode> _bricks;
+	std::vector<explosion> _explosions;
 
 	void updateBricks();
 

@@ -15,7 +15,7 @@ Bullet::Bullet(glm::vec2 pos, glm::vec2 dir, GLuint textureID, float speed, int 
 	_playerID = playerID;
 	_bulletType = bulletType;
 
-	_dim = glm::vec2(5.0f, 5.0f);
+	_dim = glm::vec2(30.0f, 30.0f);
 
 	_radius = radius;
 }

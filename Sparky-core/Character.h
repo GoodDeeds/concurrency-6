@@ -5,9 +5,12 @@
 #include <vector>
 //#include "Gun.h"
 #include "Bullet.h"
+#include "level.h"
+
+#include "BrickExplode.h"
 
 
-//const int MIN_WALL_DISTANCE = 2;
+const int MIN_WALL_DISTANCE = 20;
 const int RESPAWN_PLACES = 4;
 
 enum State
@@ -30,7 +33,7 @@ enum Person
 	class Character
 	{
 	public:
-		Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed, int choice /*, const std::vector<std::string>& levelData*/);
+		Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim, int speed, int choice , const std::vector<std::string>& levelData);
 		~Character();
 		void init();
 		void draw(Bengine::SpriteBatch& spriteBatch);
@@ -42,10 +45,10 @@ enum Person
 		bool shoot(const glm::vec2& direction, std::vector<Bullet>& bullets);
 		void stopShoot();
 		*/
-		void moveUP();
-		void moveDOWN();
-		void moveRIGHT();
-		void moveLEFT();
+		void moveUP(std::vector<BrickExplode> &_bricks);
+		void moveDOWN(std::vector<BrickExplode> &_bricks);
+		void moveRIGHT(std::vector<BrickExplode> &_bricks);
+		void moveLEFT(std::vector<BrickExplode> &_bricks);
 		bool damageTaken(int damage);
 
 		void setBrickToPop(int index);
@@ -76,12 +79,13 @@ enum Person
 		float m_mana = 100;
 		int m_score = 0;
 		int m_choice;
-		/*std::vector<std::string> m_levelData;
+		std::vector<std::string> m_levelData;
+		/*
 		std::vector<Gun> m_guns;
 		int m_currentGunIndex;
 		*/
-		std::string m_filePaths[6] = { "../Sparky-core/Textures/harryPotter/Harry/harry.png","../Sparky-core/Textures/harryPotter/Ron/ron.png","../Sparky-core/Textures/harryPotter/Hermoine/hermoine.png","../Sparky-core/Textures/harryPotter/Ginny/ginny.png","../Sparky-core/Textures/harryPotter/Malfoy/malfoy.png","../Sparky-core/Textures/harryPotter/Luna/luna.png" };
-		std::string m_filePaths2[6] = { "../Sparky-core/Textures/harryPotter/Harry/harry2.png","../Sparky-core/Textures/harryPotter/Ron/ron2.png","../Sparky-core/Textures/harryPotter/Hermoine/hermoine2.png","../Sparky-core/Textures/harryPotter/Ginny/ginny2.png","../Sparky-core/Textures/harryPotter/Malfoy/malfoy2.png","../Sparky-core/Textures/harryPotter/Luna/luna2.png" };
+		std::string m_filePaths[6] = { "../Sparky-core/Textures/Characters/black.png","../Sparky-core/Textures/Characters/silver.png","../Sparky-core/Textures/Characters/bronze.png","../Sparky-core/Textures/Characters/grey.png","../Sparky-core/Textures/Characters/archer.png","../Sparky-core/Textures/Characters/wizard.png" };
+		//std::string m_filePaths2[6] = { "../Sparky-core/Textures/harryPotter/Harry/harry2.png","../Sparky-core/Textures/harryPotter/Ron/ron2.png","../Sparky-core/Textures/harryPotter/Hermoine/hermoine2.png","../Sparky-core/Textures/harryPotter/Ginny/ginny2.png","../Sparky-core/Textures/harryPotter/Malfoy/malfoy2.png","../Sparky-core/Textures/harryPotter/Luna/luna2.png" };
 		//glm::vec2 respawnPosition[RESPAWN_PLACES] = { glm::vec2(130.0f,30.0f),glm::vec2(150.0f,30.0f), glm::vec2(150.0f,50.0f), glm::vec2(170.0f,70.0f) };
 		
 		glm::vec2 respawnPosition[RESPAWN_PLACES] = { glm::vec2(130.0f,30.0f),glm::vec2(150.0f,30.0f), glm::vec2(150.0f,50.0f), glm::vec2(170.0f,70.0f) };

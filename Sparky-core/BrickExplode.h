@@ -10,7 +10,7 @@ class BrickExplode
 {
 public:
 	BrickExplode();
-	BrickExplode( int index);
+	BrickExplode( int index /*, glm::vec2 brickPosition*/);
 	~BrickExplode();
 
 	void draw(Bengine::SpriteBatch& spriteBatch);

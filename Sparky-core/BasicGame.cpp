@@ -19,8 +19,8 @@ BasicGame::BasicGame(int noOfPlayers, int currentIndex, const std::vector<Player
 {
 	socket = sockClient;
 
-	_playerDim = glm::vec2(30.0f, 30.0f);
-	_bulletDim = glm::vec2(5.0f, 5.0f);
+	_playerDim = glm::vec2(45.0f, 45.0f);
+	_bulletDim = glm::vec2(30.0f, 30.0f);
 	_noOfPlayers = noOfPlayers;
 	_currentIndex = currentIndex;
 	_players = players;
@@ -49,23 +49,23 @@ void BasicGame::run() {
 	gameLoop();
 }
 
-void BasicGame::upDownControl()
+/*void BasicGame::upDownControl()
 {
 	if (_inputManager.isKeyPressed(SDLK_UP))
-		_mainPlayer->moveUP();
+		//_mainPlayer->moveUP();
 
 	if (_inputManager.isKeyPressed(SDLK_DOWN))
-		_mainPlayer->moveDOWN();
+		//_mainPlayer->moveDOWN();
 }
 
 void BasicGame::rightLeftControl()
 {
 	if (_inputManager.isKeyPressed(SDLK_LEFT))
-		_mainPlayer->moveLEFT();
+	//	_mainPlayer->moveLEFT();
 
-	if (_inputManager.isKeyPressed(SDLK_RIGHT))
-		_mainPlayer->moveRIGHT();
-}
+	if (_inputManager.isKeyPressed(SDLK_RIGHT)) {}
+	//	_mainPlayer->moveRIGHT();
+}*/
 
 
 void BasicGame::initSystems() {
@@ -78,6 +78,7 @@ void BasicGame::initSystems() {
 
 
 	/*
+	
 	std::vector<glm::vec2> t_brickPosition;
 
 	std::vector<std::string> t_levelData;
@@ -109,15 +110,18 @@ void BasicGame::initSystems() {
 			}
 		}
 	}
+	
 	*/
 
-	for (int i = 0; i < 39 ; i++) {
-		_bricks.emplace_back(i);
+	for (int i = 0; i < 48 ; i++) {
+		_bricks.emplace_back(i /*, t_brickPosition[i]*/);
 	}
 
 	
 	initLevels(_currentLevel);
+	
 	_camera.init(_screenWidth, _screenHeight);
+	_camera.setScale(2);
 
 	_spriteBatch.init();
 	_fpsLimiter.init(_maxFPS);
@@ -128,7 +132,7 @@ void BasicGame::initSystems() {
 			std::cout << " client spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
 		else
 			std::cout << " server spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
-		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 1, 0/*, m_leveldata*/);
+		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 5, 0, _leveldata);
 	}
 
 	_mainPlayer = &(_chars[_currentIndex]);
@@ -195,6 +199,7 @@ void BasicGame::gameLoop() {
 
 		updateChars();
 		updateBullets();
+		updateExplosions();
 
 		//updateBricks();
 
@@ -383,17 +388,31 @@ void BasicGame::updateChars()
 			i++;
 			temp = "";
 
-			static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bubble_Big.png");
+			static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/bomb.png");
 
 			if (pID != _currentIndex)
 			{
-				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.001f, 500, pID, bType, 20);
+				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.001f, 500, pID, bType, 200);
 			}
 		}
 		if (j != _currentIndex)
 			_chars[j].setData(x, y/*, health, score*/);
 	}
 	//_mainPlayer->update();
+}
+
+void BasicGame::updateExplosions()
+{
+	for (int i = 0; i < _explosions.size(); i++)
+	{
+		if (_explosions[i].updateTimer()) {}
+		else
+		{
+			_explosions[i] = _explosions.back();
+			_explosions.pop_back();
+		}
+
+	}
 }
 
 void BasicGame::processInput() {
@@ -426,16 +445,16 @@ void BasicGame::processInput() {
 	}
 
 	if (_inputManager.isKeyDown(SDLK_w)) {
-		_mainPlayer->moveUP();
+		_mainPlayer->moveUP(_bricks);
 	}
 	if (_inputManager.isKeyDown(SDLK_s)) {
-		_mainPlayer->moveDOWN();
+		_mainPlayer->moveDOWN(_bricks);
 	}
 	if (_inputManager.isKeyDown(SDLK_a)) {
-		_mainPlayer->moveLEFT();
+		_mainPlayer->moveLEFT(_bricks);
 	}
 	if (_inputManager.isKeyDown(SDLK_d)) {
-		_mainPlayer->moveRIGHT();
+		_mainPlayer->moveRIGHT(_bricks);
 	}
 	if (_inputManager.isKeyDown(SDLK_q)) {
 		_camera.setScale(_camera.getScale() + SCALE_SPEED);
@@ -456,10 +475,10 @@ void BasicGame::processInput() {
 		std::cout << "emitting in direction client " << direction.x << " " << direction.y << " " << playerPosition.x << " " << playerPosition.x << std::endl;
 		//_bullets.emplace_back(playerPosition, direction, 1.00f, 1000);
 		
-		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/Bubble_Big.png");
+		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/bomb.png");
 
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.001f, 500, _currentIndex, 1, 20);
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.001f, 500, _currentIndex, 1, 200);
 
 		newBulls += _bullets[_bullets.size() - 1].getData();
 		newBullCount++;
@@ -516,6 +535,7 @@ void BasicGame::updateBullets()
 					}
 					_bullets[i] = _bullets.back();
 					_bullets.pop_back();
+					_explosions.emplace_back(glm::vec2(bulPos.x, bulPos.y));
 					continue;
 				}
 			}
@@ -525,6 +545,7 @@ void BasicGame::updateBullets()
 			{
 				_bullets[i] = _bullets.back();
 				_bullets.pop_back();
+				_explosions.emplace_back(glm::vec2(bulPos.x, bulPos.y));
 			}
 			else
 				i++;
@@ -622,6 +643,10 @@ void BasicGame::drawGame() {
 
 	for (int i = 0; i < _bullets.size(); i++) {
 		_bullets[i].draw(_spriteBatch);
+	}
+
+	for (int i = 0; i < _explosions.size(); i++) {
+		_explosions[i].draw(_spriteBatch);
 	}
 
 	for (int i = 0; i < _noOfPlayers; i++)

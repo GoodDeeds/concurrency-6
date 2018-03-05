@@ -21,6 +21,7 @@
 #include "player.h"
 #include "Sockets.h"
 #include "Character.h"
+#include "explosion.h"
 #include "BrickExplode.h"
 #include <mutex>
 
@@ -55,6 +56,7 @@ private:
 	//void updateBullets();
 	void updateChars();
 	void updateBullets();
+	void updateExplosions();
 	//std::vector<Level*> _levels;
 
 	int _currentLevel;
@@ -62,7 +64,9 @@ private:
 
 	std::vector<BrickExplode> _bricks;
 
-	
+	std::vector<glm::vec2> t_brickPosition;
+
+	std::vector<std::string> t_levelData;
 
 	void updateBricks();
 
@@ -88,6 +92,11 @@ private:
 	glm::vec2 _heartPos;
 	glm::vec2 _heartDim = glm::vec2(10, 10);
 	std::vector<Level*> _levels;
+
+	
+
+
+	std::vector<explosion> _explosions;
 
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;

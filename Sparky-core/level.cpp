@@ -43,13 +43,13 @@ Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 		for (int x = 0; x < _levelData[y].size(); x++) {
 
 			char tile = _levelData[y][x];
-			glm::vec4 destRect(x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
+			glm::vec4 destRect(y * TILE_WIDTH, x * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
 			switch (tile) {
 			case 'R':
 				std::cout << "rendering R " << std::endl;
 				_spriteBatch.draw(destRect,
 					uvRect,
-					Bengine::ResourceManager::getTexture("../Sparky-core/Textures/red_bricks.png").id,
+					Bengine::ResourceManager::getTexture("../Sparky-core/Textures/bricksx64.png").id,
 					0.0f,
 					color);
 				break;
@@ -57,7 +57,7 @@ Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 				std::cout << "rendering C " << std::endl;
 				_spriteBatch.draw(destRect,
 					uvRect,
-					Bengine::ResourceManager::getTexture("../Sparky-core/Textures/glass.png").id,
+					Bengine::ResourceManager::getTexture("../Sparky-core/Textures/red_bricks.png").id,
 					0.0f,
 					color);
 				break;
@@ -80,7 +80,7 @@ Level::Level(const std::string &fileName, int screenWidth, int screenHeight) {
 			case 'Z':
 				std::cout << "rendering Z " << std::endl;
 				//_zombieStartPositions.emplace_back(x * TILE_WIDTH, y * TILE_WIDTH);
-				_levelData[x][y] = '.'; //Homogenize our collision cases
+				//_levelData[x][y] = '.'; //Homogenize our collision cases
 				break;
 			default:
 				break;
