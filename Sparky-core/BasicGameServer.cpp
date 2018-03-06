@@ -447,16 +447,16 @@ void BasicGameServer::processInput() {
 	}
 
 
-	if (_inputManager.isKeyDown(SDLK_w)) {
+	if (_inputManager.isKeyDown(SDLK_w)|| _inputManager.isKeyDown(SDLK_UP)) {
 		_mainPlayer->moveUP(_bricks, t_brickFixedPosition);
 	}
-	if (_inputManager.isKeyDown(SDLK_s)) {
+	if (_inputManager.isKeyDown(SDLK_s)|| _inputManager.isKeyDown(SDLK_DOWN)) {
 		_mainPlayer->moveDOWN(_bricks, t_brickFixedPosition);
 	}
-	if (_inputManager.isKeyDown(SDLK_a)) {
+	if (_inputManager.isKeyDown(SDLK_a)|| _inputManager.isKeyDown(SDLK_LEFT)) {
 		_mainPlayer->moveLEFT(_bricks, t_brickFixedPosition);
 	}
-	if (_inputManager.isKeyDown(SDLK_d)) {
+	if (_inputManager.isKeyDown(SDLK_d)|| _inputManager.isKeyDown(SDLK_RIGHT)) {
 		_mainPlayer->moveRIGHT(_bricks, t_brickFixedPosition);
 	}
 	if (_inputManager.isKeyDown(SDLK_q)) {
@@ -466,7 +466,7 @@ void BasicGameServer::processInput() {
 		_camera.setScale(_camera.getScale() - SCALE_SPEED);
 	}
 
-	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
+	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)|| _inputManager.isKeyDown(SDLK_SPACE)) {
 		glm::vec2 mouseCoords = _inputManager.getMouseCoords();
 		mouseCoords = _camera.convertScreenToWorld(mouseCoords);
 		//std::cout << mouseCoords.x << " " << mouseCoords.y << std::endl;
