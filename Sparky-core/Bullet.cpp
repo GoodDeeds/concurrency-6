@@ -6,7 +6,8 @@
 
 Bullet::Bullet(glm::vec2 pos, glm::vec2 dir, GLuint textureID, float speed, int lifeTime, int playerID, int bulletType, float radius)
 {
-	_lifeTime = lifeTime;
+	_lifeTime = 100;
+	remainingLife = _lifeTime;
 	_position = pos;
 	_direction = dir;
 	_speed = speed;
@@ -43,10 +44,10 @@ void Bullet::draw(Bengine::SpriteBatch& spriteBatch) {
 }
 
 bool Bullet::update() {
-	_position += _direction * _speed;
+	//_position += _direction * _speed;
 	_lifeTime--;
 	remainingLife = _lifeTime;
-	if (_lifeTime == 0) {
+	if (_lifeTime <= 0) {
 		return true;
 	}
 	return false;

@@ -91,6 +91,8 @@ private:
 
 	std::vector<std::string> t_levelData;
 
+	void updatePlayerLife();
+
 
 	float _maxFPS;
 	float _fps;

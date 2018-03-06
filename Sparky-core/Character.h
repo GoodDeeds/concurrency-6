@@ -38,6 +38,8 @@ enum Person
 		void init();
 		void draw(Bengine::SpriteBatch& spriteBatch);
 		void update();
+		void PlayerDead();
+		bool isAlive() { return alive; }
 		/*
 		void addGun(Gun gun);
 		void nextGun();
@@ -63,9 +65,13 @@ enum Person
 		//std::string getNameScore() { return m_name + "\t\t\t" + std::to_string(m_score); }
 		//setters
 
-		void setData(float x, float y/*, float health, int score*/);
-		//void increaseScore();
+		void setData(float x, float y, float health/*, int score*/);
+		void increaseScore();
+		int getScore() { return score; }
+		void setLife(bool set) { alive = set; }
 	private:
+		int score;
+		bool alive;
 		void respawn();
 		glm::vec2 m_position, m_dim;
 		glm::vec4 m_uv = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);

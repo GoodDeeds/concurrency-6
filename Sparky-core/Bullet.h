@@ -17,7 +17,7 @@ public:
 
 	void draw(Bengine::SpriteBatch& spriteBatch);
 	bool update();			// Returns true when we are out of life, to be destroyed
-	glm::vec2 getPosition() { return _position + glm::vec2(_dim.x / 2, _dim.y / 2); }	//the dimension have been added to get the position of the centre of the bullet
+	glm::vec2 getPosition() { return _position /*+ glm::vec2(_dim.x / 2, _dim.y / 2)*/; }	//the dimension have been added to get the position of the centre of the bullet
 	glm::vec2 getDim() { return _dim; }
 	int getPlayerID() { return _playerID; }
 	int getDamage() { return _damage; }

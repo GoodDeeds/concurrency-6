@@ -49,24 +49,6 @@ void BasicGame::run() {
 	gameLoop();
 }
 
-/*void BasicGame::upDownControl()
-{
-	if (_inputManager.isKeyPressed(SDLK_UP))
-		//_mainPlayer->moveUP();
-
-	if (_inputManager.isKeyPressed(SDLK_DOWN))
-		//_mainPlayer->moveDOWN();
-}
-
-void BasicGame::rightLeftControl()
-{
-	if (_inputManager.isKeyPressed(SDLK_LEFT))
-	//	_mainPlayer->moveLEFT();
-
-	if (_inputManager.isKeyPressed(SDLK_RIGHT)) {}
-	//	_mainPlayer->moveRIGHT();
-}*/
-
 
 void BasicGame::initSystems() {
 
@@ -127,11 +109,7 @@ void BasicGame::initSystems() {
 	_leveldata = _levels[_currentLevel]->getLevelData();
 	for (int i = 0; i < _noOfPlayers; i++)
 	{
-		if(i == _currentIndex)
-			std::cout << " client spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
-		else
-			std::cout << " server spawn position ---- " << _players[i].position.x << " " << _players[i].position.y << std::endl;
-		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 5, 0, _leveldata);
+		_chars.emplace_back(_players[i].name, _players[i].position, _players[i].playerIndex, _playerDim, 3, 0, _leveldata);
 	}
 
 	_mainPlayer = &(_chars[_currentIndex]);
@@ -178,6 +156,14 @@ void BasicGame::gameLoop() {
 
 		_inputManager.update();
 
+
+		if (_mainPlayer->getHealth() <= 0)
+		{
+			std::cout << "You killed " << _mainPlayer->getScore() << " players " << std::endl;
+			SDL_Quit();
+		}
+			
+
 		processInput();
 
 		_time += 0.1;
@@ -198,7 +184,7 @@ void BasicGame::gameLoop() {
 
 		updateChars();
 		updateBullets();
-		updateExplosions();
+		//updateExplosions();
 
 		//updateBricks();
 
@@ -225,6 +211,17 @@ void BasicGame::gameLoop() {
 		}
 
 
+	}
+}
+
+void BasicGame::updatePlayerLife()
+{
+	for (int i = 0; i < _chars.size(); i++)
+	{
+		if (_chars[i].getHealth() > 0.0f)
+			_chars[i].setLife(true);
+		else
+			_chars[i].setLife(false);
 	}
 }
 
@@ -391,11 +388,11 @@ void BasicGame::updateChars()
 
 			if (pID != _currentIndex)
 			{
-				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.001f, 500, pID, bType, 200);
+				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.0f, 500, pID, bType, 40);
 			}
 		}
 		if (j != _currentIndex)
-			_chars[j].setData(x, y/*, health, score*/);
+			_chars[j].setData(x, y, health);
 	}
 	//_mainPlayer->update();
 }
@@ -477,7 +474,7 @@ void BasicGame::processInput() {
 		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/bomb.png");
 
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.001f, 500, _currentIndex, 1, 200);
+		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.0f, 500, _currentIndex, 1, 40);
 
 		newBulls += _bullets[_bullets.size() - 1].getData();
 		newBullCount++;
@@ -528,9 +525,11 @@ void BasicGame::updateBullets()
 
 					if (_chars[j].damageTaken(_bullets[i].getDamage()))
 					{
+						_chars[j].setLife(false);
 						std::cout << "Player dead " << std::endl;
-						//if (_bullets[i].getPlayerID() == _currentIndex)
-						//_mainPlayer->increaseScore();
+
+						if (_bullets[i].getPlayerID() == _currentIndex)
+							_mainPlayer->increaseScore();
 					}
 					_bullets[i] = _bullets.back();
 					_bullets.pop_back();
@@ -644,13 +643,14 @@ void BasicGame::drawGame() {
 		_bullets[i].draw(_spriteBatch);
 	}
 
-	for (int i = 0; i < _explosions.size(); i++) {
+	/*for (int i = 0; i < _explosions.size(); i++) {
 		_explosions[i].draw(_spriteBatch);
-	}
+	}*/
 
 	for (int i = 0; i < _noOfPlayers; i++)
 	{
-		_chars[i].draw(_spriteBatch);
+		if(_chars[i].isAlive())
+			_chars[i].draw(_spriteBatch);
 	}
 
 	for (int i = 0; i < _bricks.size(); i++) {

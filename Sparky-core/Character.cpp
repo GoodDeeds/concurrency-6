@@ -22,6 +22,8 @@ Character::Character(std::string name, glm::vec2 pos, int person, glm::vec2 dim,
 	m_state = NOTSHOOTING;
 	m_choice = choice;
 	m_score = -1;
+	alive = true;
+	score = 0;
 }
 
 void Character::init()
@@ -32,17 +34,26 @@ Character::~Character()
 {
 }
 
-void Character::setData(float x, float y /*, float health, int score*/)
+void Character::increaseScore()
+{
+	score++;
+}
+
+void Character::PlayerDead()
+{
+	alive = false;
+}
+
+void Character::setData(float x, float y , float health /*, int score*/)
 {
 	m_position.x = x;
 	m_position.y = y;
-	//m_health = health;
+	m_health = health;
 	//m_score = score;
 }
 
 
 void Character::setBrickToPop(int index) {
-	std::cout << " doing "<< index << std::endl;
 	m_score = index;
 }
 
@@ -70,7 +81,6 @@ bool Character::damageTaken(int damage)
 	m_health -= damage;
 	if (m_health <= 0)
 	{
-		std::cout << m_name << " DEAD" << std::endl;
 		//respawn();
 		return true;
 	}

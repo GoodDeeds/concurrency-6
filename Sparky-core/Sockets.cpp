@@ -341,7 +341,6 @@ void socketServer::select_activity()
 		}
 		if (std::all_of(flag.begin(), flag.end(), [](bool v) { return v; }))
 		{
-			std::cout << "I am in " << std::endl;
 			mtxPlayerData.lock();
 			std::string collectedString = playerData;
 			mtxPlayerData.unlock();
@@ -349,7 +348,6 @@ void socketServer::select_activity()
 				collectedString += collectedData[i];
 			if (init)
 			{
-				std::cout << " here " << std::endl;
 				collectedString = "i" + (std::to_string(max_clients + 1) + "|") + collectedString + spawnPositions + "|";
 				playerData = spawnPositions.substr(0, 19) + "|200|0|0|";
 				mtx.lock();

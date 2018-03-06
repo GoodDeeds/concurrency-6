@@ -64,7 +64,6 @@ bool BrickExplode::getVisibility()
 void BrickExplode::setVisibility(bool SetValue)
 {
 	_toshow = SetValue;
-	std::cout << "setting false" << std::endl;
 }
 
 

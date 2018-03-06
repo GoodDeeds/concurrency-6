@@ -57,6 +57,8 @@ private:
 	void updateChars();
 	void updateBullets();
 	void updateExplosions();
+	void updatePlayerLife();
+
 	//std::vector<Level*> _levels;
 
 	int _currentLevel;
