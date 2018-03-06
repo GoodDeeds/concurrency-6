@@ -1,0 +1,35 @@
+﻿Bengine: basic game engine to build the whole game.
+
+
+BasicGame.cpp:
+This part is for client . The clients run according to this .
+
+
+BasicGameServer.cpp:
+    This is for server .
+
+
+BrickExplode.cpp:
+         This is to ensure that when a bomb is planted near the explodable bricks  when the bomb explodes the bricks will break.
+So it reads the text file which contains the level data and store position coordinates of all explodable blocks in a vector. And when the explodes the position coordinate is removed from the vector.
+ 
+Bullet.cpp:
+        This is for planting bomb  and noting the position coordinates where bomb has been planted. And when the bullet is planted the timer starts from 1000 and when it reaches 0 the bomb will explode .
+
+
+Character.cpp:
+        This is for generating characters and their health and their situation whether they are in bomb planting position or not. And it gets the position coordinates of the player and update them whenever it moves. And if the health becomes equal to zero then the character is respawned at random position.
+
+
+Level.cpp:
+        It reads the text file with map init in the form of letters. It reads every line and store in vector of strings. Each character in the text file is assigned to a unique png file . So whenever it sees that particular character it automatically renders the respective image and resulting map can be seen on the output screen.
+
+
+Main.cpp:
+        It controls the flow of this whole project as it contains the main function, i.e from where the program begin its execution. Firstly it asks the user(player) the name with which he wants to play in the game. Then it asks for the type of character the player wants to use in the game and finally its asks the user whether he wants to behave as server to which all the other clients would be connected or it wants to behave as a client and connect to a server. If you select to be a server you will be asked to input the no of clients, i.e the no of other users that you want to connect with you and play. Suppose you input no of clients = 4 then the game will not start until 4 other users have connected. If you select to be a client, you will be asked to enter the server’s ip address so that u get connected to that server and play the game. All this information is stored in string and then we process this string.
+        
+
+
+Sockets.cpp:
+It creates TCP sockets which are used for communicating between the servers and client. They pass the information in the form of strings. All clients pass the information  to the server one by one (we can use mutex lock for this to happen)
+Server pass information given by a client to all the  clients so that the positions of their characters are updated on other screens. And server itself also passes its information to all the clients and get updated on the other screen. The string passed between server and client has the their  updated position coordinates and information regarding bullets and explodable bocks.
