@@ -22,11 +22,6 @@ void explosion::draw(Bengine::SpriteBatch & spriteBatch)
 	color.b = 255;
 	color.a = 255;
 
-	//glm::vec4 posAndSize = glm::vec4(_pos.x, _pos.y, 30, 30);
-
-	//spriteBatch.draw(posAndSize, uv, texture.id, 0.0f, color);
-
-	//the dimensions of bullet has been subtracted to centre the bullet
 	spriteBatch.draw(glm::vec4(_pos.x , _pos.y , _dim.x, _dim.y), uv, texture.id, 0.0f, color);
 }
 

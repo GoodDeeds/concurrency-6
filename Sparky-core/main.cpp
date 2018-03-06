@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	std::string name2;
 	name2 = std::string(name);
 	
-	std::cout << "Enter your character choice 0-6\n";
+	std::cout << "Enter your character choice 0-5\n";
 	char playerChoice[100];
 	std::cin >> playerChoice;
 	strcat_s(name, "|");
@@ -94,12 +94,6 @@ int main(int argc, char** argv)
 	std::cin >> x;
 	return 0;
 }
-
-/*MainGame maingame;
-maingame.run();
-
-return 0;
-}*/
 
 
 void processString(std::string & input, std::string & name2, int & indexOfClient, int & noOfPlayers, std::vector<Player> & players)

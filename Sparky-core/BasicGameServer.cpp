@@ -74,8 +74,6 @@ void BasicGameServer::initSystems() {
 
 			if (t_levelData[y][x] == 'C')
 			{
-				
-					//std::cout << "adding C x = " << x << " adding y = " << y << std::endl;
 					t_brickFixedPosition.push_back(glm::vec2(y, x));
 			}
 
@@ -107,33 +105,25 @@ void BasicGameServer::initSystems() {
 
 
 	_heartTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/heart.png").id;
-	_wandTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/wand.png").id;
 	_redTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/red.png").id;
-	_blueTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/blue.png").id;
 	_grayTexID = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/gray.png").id;
-
 }
 void BasicGameServer::initLevels(int level) {
-	//_levels.push_back(new Level("../Sparky-core/Levels/level" + std::to_string(level + 1) + ".txt", _screenWidth, _screenHeight));
 	_levels.push_back(new Level("../Sparky-core/Levels/level1.txt", _screenWidth, _screenHeight));
-
-	//std::cout << "level is pushed back" << std::endl;
 }
 
 void BasicGameServer::receiver()
 {
-	//while (m_gameState != GameStateServer::EXIT)
-	//{
+	
 	std::string in;
 	socket->receiveData(in);
-	//std::cout <<"in"<< in<<std::endl;
 	while (in[0] == 'i')				//the server reads from local data and hence is not a blocking call. We introduce while loop to prevent game running with initial data indicated by 'i'
 		socket->receiveData(in);
 	mtx.lock();
 	data = std::string(in);
 	std::cout << data << std::endl;
 	mtx.unlock();
-	//}
+	
 }
 
 void BasicGameServer::initShaders() {
@@ -168,23 +158,10 @@ void BasicGameServer::gameLoop() {
 		_camera.setPosition(_mainPlayer->getPosition());
 		_camera.update();
 
-		//Update all bullets
-		/*for (int i = 0; i < _bullets.size();) {
-			if (_bullets[i].update() == true) {
-				_bullets[i] = _bullets.back();
-				_bullets.pop_back();
-			}
-			else {
-				i++;
-			}
-		}*/
 
 		updateChars();
 		updateBullets();
 		updatePlayerLife();
-		//updateExplosions();
-
-		//updateBricks();
 
 		drawGame();
 
@@ -219,32 +196,15 @@ void BasicGameServer::updatePlayerLife()
 	}
 }
 
-void BasicGameServer::updateBricks()
-{
-	/*for (int i = 0; i < _bricks.size(); i++)
-	{
-		glm::vec2 diff = (_mainPlayer->getPosition() - _bricks[i].getPosition());
-		if (abs(diff.x) <= 30.0f && abs(diff.y) <= 30.0f && _bricks[i].getVisibility())
-		{
-			_mainPlayer->setBrickToPop(i);
-			std::cout << "Popping " << std::endl;
-			break;
-		}
-		else
-			_mainPlayer->setBrickToPop(-1);
-	}*/
-}
 
 void BasicGameServer::updateChars()
 {
 	mtx.lock();
 	std::string tempData = data;
 	mtx.unlock();
-	//std::cout << "temp data  ==  "<<tempData << std::endl;
 
 	if (tempData == "")
 	{
-		//_mainPlayer->update();
 		return;
 	}
 	int i = 0;
@@ -293,7 +253,6 @@ void BasicGameServer::updateChars()
 		
 		if (_bricks.size() > 0 && brickToPop != -1 && brickToPop < _bricks.size())
 		{
-			//std::cout << "setting" << std::endl;
 
 			_bricks[brickToPop].setVisibility(false);
 			
@@ -322,15 +281,6 @@ void BasicGameServer::updateChars()
 			}
 			int pID = std::stoi(temp);
 
-			//bulletType
-			i++;
-			temp = "";
-			while (tempData[i] != '|')
-			{
-				temp += tempData[i];
-				i++;
-			}
-			int bType = std::stoi(temp);
 
 			//x position
 			i++;
@@ -353,25 +303,7 @@ void BasicGameServer::updateChars()
 			float yP = std::stof(temp);
 
 			//x-direction
-			i++;
-			temp = "";
-			while (tempData[i] != ' ')
-			{
-				temp += tempData[i];
-				i++;
-			}
-			float xD = std::stof(temp);
-
-			//y direction
-
-			i++;
-			temp = "";
-			while (tempData[i] != '|')
-			{
-				temp += tempData[i];
-				i++;
-			}
-			float yD = std::stof(temp);
+			
 
 			i++;
 			temp = "";
@@ -381,16 +313,15 @@ void BasicGameServer::updateChars()
 			if (pID != _currentIndex) {
 				std::cout << " adding bullets " << _bullets.size() << std::endl;
 		
-				_bullets.emplace_back(glm::vec2(xP, yP), glm::vec2(xD, yD),/* _bulletTexID[bType]*/ texture.id, 0.0f, 500, pID, bType, 40);
+				_bullets.emplace_back(glm::vec2(xP, yP) ,texture.id, 500, pID , 40);
 			}
 				
 		}
 		
 		if (j != _currentIndex)
-			_chars[j].setData(x, y , health /*, score*/);
+			_chars[j].setData(x, y , health);
 			
 	}
-	//_mainPlayer->update();
 }
 
 
@@ -402,6 +333,8 @@ void BasicGameServer::updateBullets()
 		{
 			glm::vec2 bulPos = _bullets[i].getPosition();
 			glm::vec2 playerPos = _chars[j].getPosition();
+
+			
 			if (_bullets[i].getPlayerID() == j)
 			{
 				i++;
@@ -422,7 +355,7 @@ void BasicGameServer::updateBullets()
 					float diffY = abs(bulPos.y - _bricks[z].getPosition().y * 20.0f);
 
 
-					if (diffX <= 40.0f && diffY <= 40.0f && _bricks[z].getVisibility())
+					if (diffX <= 30.0f && diffY <= 30.0f && _bricks[z].getVisibility())
 					{
 						_mainPlayer->setBrickToPop(z);
 						std::cout << "Popping " << std::endl;
@@ -435,7 +368,7 @@ void BasicGameServer::updateBullets()
 				if (abs(abs(bulPos.x - playerPos.x) - (_playerDim.x / 2 + _bulletDim.x / 2) ) <= _bullets[i]._radius &&
 					abs(abs(bulPos.y - playerPos.y) - (_playerDim.y / 2 + _bulletDim.y / 2)) <= _bullets[i]._radius)
 				{
-					std::cout << "Player damaged " << std::endl;
+					std::cout << "Player damaged  reducing health " << std::endl;
 
 					if (_chars[j].damageTaken(_bullets[i].getDamage()))
 					{
@@ -455,7 +388,7 @@ void BasicGameServer::updateBullets()
 				}
 			}
 
-			if (_bullets[i].update(/*_leveldata*/))         
+			if (_bullets[i].update())         
 			{
 				
 				_bullets[i] = _bullets.back();
@@ -481,56 +414,7 @@ void BasicGameServer::updateExplosions()
 
 	}
 }
-/*
 
-void BasicGameServer::updateBullets()
-{
-	for (unsigned int i = 0; i < _bullets.size();)
-	{
-		bool ifBulletDamaged = false;
-		for (int j = 0; j < _noOfPlayers; j++)
-		{
-			glm::vec2 bulPos = _bullets[i].getPosition();
-			glm::vec2 playerPos = _chars[j].getPosition();
-
-			if (_bullets[i].remainingLife == 1)
-			{
-				std::cout << "Lifetime finished " << std::endl;
-
-				if (abs(abs(bulPos.x - playerPos.x) - (_playerDim.x / 2 + _bulletDim.x / 2)) <= _bullets[i]._radius &&
-					abs(abs(bulPos.y - playerPos.y) - (_playerDim.y / 2 + _bulletDim.y / 2)) <= _bullets[i]._radius)
-				{
-					ifBulletDamaged = true;
-
-					std::cout << "Player damaged = " << j <<  std::endl;
-
-					if (_chars[j].damageTaken(_bullets[i].getDamage()))
-					{
-						std::cout << "Player dead " << std::endl;
-						//if (_bullets[i].getPlayerID() == _currentIndex)
-						//_mainPlayer->increaseScore();
-					}
-					
-				}
-			}
-		}
-		if (ifBulletDamaged)
-		{
-			_bullets[i] = _bullets.back();
-			_bullets.pop_back();
-			ifBulletDamaged = false;
-			continue;
-		}
-		if (_bullets[i].update())
-		{
-			_bullets[i] = _bullets.back();
-			_bullets.pop_back();
-		}
-		else
-			i++;
-	}
-}
-*/
 
 void BasicGameServer::processInput() {
 	SDL_Event evnt;
@@ -592,12 +476,11 @@ void BasicGameServer::processInput() {
 		direction = glm::normalize(direction);    // normalise vector to unit length
 
 
-		//_bullets.emplace_back(playerPosition, direction, 1.00f, 1000);
 	
 		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/bomb.png");
 
 
-		_bullets.emplace_back(playerPosition, direction, /* _bulletTexID[bType]*/ texture.id, 0.0f, 500, _currentIndex, 1, 40);
+		_bullets.emplace_back(playerPosition, texture.id, 500, _currentIndex, 40);
 
 			newBulls += _bullets[_bullets.size() - 1].getData();
 			newBullCount++;
@@ -626,20 +509,6 @@ void BasicGameServer::drawGame() {
 	_levels[_currentLevel]->draw();
 	_spriteBatch.begin();
 
-	/*glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
-	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-	static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-
-	Bengine::Color color;
-	color.r = 255;
-	color.g = 255;
-	color.b = 255;
-	color.a = 255;
-
-
-	_spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
-	*/
-	//_spriteBatch.draw(pos + glm::vec4(0, 60 , 0, 0), uv, texture.id, 0.0f, color);
 
 	
 	for (int i = 0; i < _bullets.size(); i++) {
@@ -666,14 +535,10 @@ void BasicGameServer::drawGame() {
 
 
 	float health = _mainPlayer->getHealth();
-	float mana = 200;// _mainPlayer->getMana();
 	_heartPos = _camera.convertScreenToWorld(glm::vec2(40.0f, 40.0f));
 	_spriteBatch.draw(glm::vec4(_heartPos.x, _heartPos.y, _heartDim.x, _heartDim.y), _uv, _heartTexID, 5, _color);
 	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x, _heartPos.y, health / 4, _heartDim.y), _uv, _redTexID, 5, _color);
 	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x + health / 4, _heartPos.y, 50.0f - health / 4, _heartDim.y), _uv, _grayTexID, 5, _color);
-	_spriteBatch.draw(glm::vec4(_heartPos.x, _heartPos.y - 2 * _heartDim.y, _heartDim.x, _heartDim.y), _uv, _wandTexID, 5, _color);
-	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x, _heartPos.y - 2 * _heartDim.y, mana / 2, _heartDim.y), _uv, _blueTexID, 5, _color);
-	_spriteBatch.draw(glm::vec4(_heartPos.x + 1.5*_heartDim.x + mana / 2, _heartPos.y - 2 * _heartDim.y, 50.0f - mana / 2, _heartDim.y), _uv, _grayTexID, 5, _color);
 
 	_spriteBatch.end();
 

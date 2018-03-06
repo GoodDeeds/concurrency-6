@@ -14,9 +14,7 @@ public:
 	~BrickExplode();
 
 	void draw(Bengine::SpriteBatch& spriteBatch);
-	bool update();
 
-	//void initBricks();
 
 	glm::vec2 getPosition() { return _position /*+ glm::vec2(_dim.x / 2, _dim.y / 2)*/; }	//the dimension have been added to get the position of the centre of the bullet
 

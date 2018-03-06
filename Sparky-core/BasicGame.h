@@ -44,8 +44,7 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
-	void upDownControl();
-	void rightLeftControl();
+
 
 	void updateChars();
 	void updateExplosions();
@@ -75,7 +74,6 @@ private:
 	std::vector<BrickExplode> _bricks;
 	std::vector<explosion> _explosions;
 
-	void updateBricks();
 
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;

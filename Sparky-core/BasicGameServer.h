@@ -33,17 +33,15 @@ public:
 	BasicGameServer(int noOfPlayers, int currentIndex, const std::vector<Player>& players, socketServer* sockServer);
 	~BasicGameServer();
 
-	void run();                   // to run our game
+	void run();               // to run our game continuosly
 
 
 
 
 private:
-	void loadImage(std::string path, GLuint& ID);
 
 	void initSystems();           // to initialise opengl and sdl and our game window
 	void initShaders();
-	void initLevels();
 	void processInput();
 	void gameLoop();
 	void drawGame();
@@ -51,15 +49,10 @@ private:
 	void receiver();
 
 	void initLevels(int currentLevel);
-	void upDownControl();
-	void rightLeftControl();
-	//void updateBullets();
 	void updateChars();
 	void updateBullets();
 	void updateExplosions();
 	void updatePlayerLife();
-
-	//std::vector<Level*> _levels;
 
 	int _currentLevel;
 	std::vector<std::string> _leveldata;
@@ -77,11 +70,7 @@ private:
 	Bengine::Window  _window;
 	int _screenWidth;
 	int _screenHeight;
-	//int _currentLevel;
 	GameState1 _gameState;
-
-
-
 
 	Bengine::GLSLProgram _colorProgram;
 	Bengine::Camera2D _camera;
@@ -97,11 +86,7 @@ private:
 	glm::vec2 _heartDim = glm::vec2(10, 10);
 	std::vector<Level*> _levels;
 
-	
-
-
 	std::vector<explosion> _explosions;
-
 
 	GLuint _heartTexID, _redTexID, _grayTexID, _blueTexID, _wandTexID;
 
