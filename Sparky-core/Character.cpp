@@ -71,14 +71,14 @@ bool Character::damageTaken(int damage)
 	if (m_health <= 0)
 	{
 		std::cout << m_name << " DEAD" << std::endl;
-		respawn();
+		//respawn();
 		return true;
 	}
 	return false;
 }
 
 
-void Character::moveUP(std::vector<BrickExplode> &_bricks)
+void Character::moveUP(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos)
 {
 	if (m_position.y > 930.0f)
 		return;
@@ -92,6 +92,17 @@ void Character::moveUP(std::vector<BrickExplode> &_bricks)
 	}
 	m_position += glm::vec2(0.0f, m_speed);
 	return;*/
+
+	for (int i = 0; i < _brickFixedPos.size(); i++)
+	{
+		// 20.0f is tile width , 10.0f is half of brick dim
+		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x*20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < 0)
+		{
+			std::cout << "returning " << std::endl;
+			return;
+		}
+	}
+
 	for (int i = 0; i < _bricks.size(); i++)
 	{
 		// 20.0f is tile width , 10.0f is half of brick dim
@@ -104,7 +115,7 @@ void Character::moveUP(std::vector<BrickExplode> &_bricks)
 	m_position += glm::vec2(0.0f, m_speed);
 	return;
 }
-void Character::moveDOWN(std::vector<BrickExplode> &_bricks)
+void Character::moveDOWN(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos)
 {
 	if (m_position.y < 23.0f)                   // down border screen coordinates
 		return;
@@ -119,6 +130,16 @@ void Character::moveDOWN(std::vector<BrickExplode> &_bricks)
 	m_position += glm::vec2(0.0f, -m_speed);
 	return;*/
 
+	for (int i = 0; i < _brickFixedPos.size(); i++)
+	{
+		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y* 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) > 0)
+		{
+			std::cout << "returning " << std::endl;
+			return;
+		}
+	}
+
+
 	for (int i = 0; i < _bricks.size(); i++)
 	{
 		if (_bricks[i].getVisibility() && abs(m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) > 0)
@@ -130,7 +151,7 @@ void Character::moveDOWN(std::vector<BrickExplode> &_bricks)
 	m_position += glm::vec2(0.0f, -m_speed);
 	return;
 }
-void Character::moveLEFT(std::vector<BrickExplode> &_bricks)
+void Character::moveLEFT(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos)
 {
 	if (m_position.x < 23.0f)
 		return;
@@ -143,6 +164,15 @@ void Character::moveLEFT(std::vector<BrickExplode> &_bricks)
 	}
 	m_position += glm::vec2(-m_speed, 0.0f);
 	return;*/
+
+	for (int i = 0; i < _brickFixedPos.size(); i++)
+	{
+		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) > 0)
+		{
+			std::cout << "returning " << std::endl;
+			return;
+		}
+	}
 
 	for (int i = 0; i < _bricks.size(); i++)
 	{
@@ -157,7 +187,7 @@ void Character::moveLEFT(std::vector<BrickExplode> &_bricks)
 
 
 }
-void Character::moveRIGHT(std::vector<BrickExplode> &_bricks)
+void Character::moveRIGHT(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos)
 {
 	if (m_position.x > 663.0f)
 		return;
@@ -181,6 +211,16 @@ void Character::moveRIGHT(std::vector<BrickExplode> &_bricks)
 	m_position += glm::vec2(m_speed, 0.0f);
 	return;
 	*/
+
+	for (int i = 0; i < _brickFixedPos.size(); i++) 
+	{
+		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < 0)
+		{
+			std::cout << "returning " << std::endl;
+			return;
+		}
+
+	}
 
 	for (int i = 0; i < _bricks.size(); i++)
 	{

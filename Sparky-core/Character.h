@@ -45,10 +45,10 @@ enum Person
 		bool shoot(const glm::vec2& direction, std::vector<Bullet>& bullets);
 		void stopShoot();
 		*/
-		void moveUP(std::vector<BrickExplode> &_bricks);
-		void moveDOWN(std::vector<BrickExplode> &_bricks);
-		void moveRIGHT(std::vector<BrickExplode> &_bricks);
-		void moveLEFT(std::vector<BrickExplode> &_bricks);
+		void moveUP(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos);
+		void moveDOWN(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos);
+		void moveRIGHT(std::vector<BrickExplode> &_bricks , std::vector<glm::vec2> _brickFixedPos);
+		void moveLEFT(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2> _brickFixedPos);
 		bool damageTaken(int damage);
 
 		void setBrickToPop(int index);

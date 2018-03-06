@@ -72,9 +72,8 @@ void BasicGameServer::initSystems() {
 
 	initShaders();
 
-	/*
+	
 
-	bool t_toshow = true;
 
 	std::ifstream t_file;
 	std::string t_fileName = "../Sparky-core/Levels/level1.txt";
@@ -93,16 +92,23 @@ void BasicGameServer::initSystems() {
 
 			if (t_levelData[y][x] == 'B')
 			{
-				std::cout << "adding x = " << x << " adding y = " << y << std::endl;
 				t_brickPosition.push_back(glm::vec2(y, x));
 			}
+
+			if (t_levelData[y][x] == 'C')
+			{
+				
+					std::cout << "adding C x = " << x << " adding y = " << y << std::endl;
+					t_brickFixedPosition.push_back(glm::vec2(y, x));
+			}
+
 		}
 	}
-	*/
+	
 
 	
-	for (int i = 0; i < 48; i++) {
-		_bricks.emplace_back(i /*, t_brickPosition[i]*/);
+	for (int i = 0; i < t_brickPosition.size(); i++) {
+		_bricks.emplace_back(i , t_brickPosition[i]);
 	}
 
 	initLevels(_currentLevel);
@@ -416,8 +422,7 @@ void BasicGameServer::updateBullets()
 
 			if (_bullets[i].remainingLife == 1)
 			{
-				std::cout << "Lifetime finished " << std::endl;
-				
+				std::cout << "Lifetime finished " << std::endl;	
 
 				for (int z = 0; z < _bricks.size(); z++)
 				{
@@ -469,9 +474,9 @@ void BasicGameServer::updateBullets()
 
 void BasicGameServer::updateExplosions()
 {
-	for (int i = 0; i < _explosions.size(); i++)
+	for (int i = 0; i < _explosions.size();)
 	{
-		if(_explosions[i].updateTimer()){}
+		if (_explosions[i].updateTimer()) { i++; }
 		else
 		{
 			_explosions[i] = _explosions.back();
@@ -563,16 +568,16 @@ void BasicGameServer::processInput() {
 
 
 	if (_inputManager.isKeyDown(SDLK_w)) {
-		_mainPlayer->moveUP(_bricks);
+		_mainPlayer->moveUP(_bricks, t_brickFixedPosition);
 	}
 	if (_inputManager.isKeyDown(SDLK_s)) {
-		_mainPlayer->moveDOWN(_bricks);
+		_mainPlayer->moveDOWN(_bricks, t_brickFixedPosition);
 	}
 	if (_inputManager.isKeyDown(SDLK_a)) {
-		_mainPlayer->moveLEFT(_bricks);
+		_mainPlayer->moveLEFT(_bricks, t_brickFixedPosition);
 	}
 	if (_inputManager.isKeyDown(SDLK_d)) {
-		_mainPlayer->moveRIGHT(_bricks);
+		_mainPlayer->moveRIGHT(_bricks, t_brickFixedPosition);
 	}
 	if (_inputManager.isKeyDown(SDLK_q)) {
 		_camera.setScale(_camera.getScale() + SCALE_SPEED);

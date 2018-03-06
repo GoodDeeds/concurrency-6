@@ -85,6 +85,13 @@ private:
 
 	std::vector<Bullet> _bullets;
 
+	std::vector<glm::vec2> t_brickPosition;
+
+	std::vector<glm::vec2> _brickFixed;
+
+	std::vector<std::string> t_levelData;
+
+
 	float _maxFPS;
 	float _fps;
 	float _time;

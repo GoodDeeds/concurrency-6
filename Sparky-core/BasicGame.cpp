@@ -77,15 +77,6 @@ void BasicGame::initSystems() {
 	initShaders();
 
 
-	/*
-	
-	std::vector<glm::vec2> t_brickPosition;
-
-	std::vector<std::string> t_levelData;
-
-	glm::vec2 t_dim = glm::vec2(25.0f, 25.0f);
-	bool t_toshow = true;
-
 	std::ifstream t_file;
 	std::string t_fileName = "../Sparky-core/Levels/level1.txt";
 	t_file.open(t_fileName);
@@ -93,12 +84,10 @@ void BasicGame::initSystems() {
 		Bengine::fatalError("ohMyGOD!!! The " + t_fileName + " level could not be loaded!");
 	}
 
-
 	std::string tmp;
 	while (std::getline(t_file, tmp)) {
 		t_levelData.push_back(tmp);
 	}
-
 
 	for (int y = 0; y < t_levelData.size(); y++) {
 		for (int x = 0; x < t_levelData[y].size(); x++) {
@@ -106,15 +95,25 @@ void BasicGame::initSystems() {
 			if (t_levelData[y][x] == 'B')
 			{
 				std::cout << "adding x = " << x << " adding y = " << y << std::endl;
-				t_brickPosition.push_back(glm::vec2(x, y));
+				t_brickPosition.push_back(glm::vec2(y, x));
+			}
+
+			if (t_levelData[y][x] == 'C')
+			{
+					std::cout << "adding C x = " << x << " adding y = " << y << std::endl;
+					_brickFixed.push_back(glm::vec2(y, x));
+
 			}
 		}
 	}
-	
-	*/
 
-	for (int i = 0; i < 48 ; i++) {
-		_bricks.emplace_back(i /*, t_brickPosition[i]*/);
+	
+	
+	
+	
+
+	for (int i = 0; i < t_brickPosition.size() ; i++) {
+		_bricks.emplace_back(i , t_brickPosition[i]);
 	}
 
 	
@@ -403,9 +402,9 @@ void BasicGame::updateChars()
 
 void BasicGame::updateExplosions()
 {
-	for (int i = 0; i < _explosions.size(); i++)
+	for (int i = 0; i < _explosions.size();)
 	{
-		if (_explosions[i].updateTimer()) {}
+		if (_explosions[i].updateTimer()) { i++; }
 		else
 		{
 			_explosions[i] = _explosions.back();
@@ -445,16 +444,16 @@ void BasicGame::processInput() {
 	}
 
 	if (_inputManager.isKeyDown(SDLK_w)) {
-		_mainPlayer->moveUP(_bricks);
+		_mainPlayer->moveUP(_bricks, _brickFixed);
 	}
 	if (_inputManager.isKeyDown(SDLK_s)) {
-		_mainPlayer->moveDOWN(_bricks);
+		_mainPlayer->moveDOWN(_bricks, _brickFixed);
 	}
 	if (_inputManager.isKeyDown(SDLK_a)) {
-		_mainPlayer->moveLEFT(_bricks);
+		_mainPlayer->moveLEFT(_bricks, _brickFixed);
 	}
 	if (_inputManager.isKeyDown(SDLK_d)) {
-		_mainPlayer->moveRIGHT(_bricks);
+		_mainPlayer->moveRIGHT(_bricks, _brickFixed);
 	}
 	if (_inputManager.isKeyDown(SDLK_q)) {
 		_camera.setScale(_camera.getScale() + SCALE_SPEED);

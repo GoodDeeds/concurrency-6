@@ -10,7 +10,7 @@ class BrickExplode
 {
 public:
 	BrickExplode();
-	BrickExplode( int index /*, glm::vec2 brickPosition*/);
+	BrickExplode( int index , glm::vec2 brickPosition);
 	~BrickExplode();
 
 	void draw(Bengine::SpriteBatch& spriteBatch);
@@ -29,7 +29,7 @@ public:
 	
 	
 private:
-	std::vector<glm::vec2> brickPosition;
+	//std::vector<glm::vec2> brickPosition;
 
 	std::vector<std::string> _levelData;
 

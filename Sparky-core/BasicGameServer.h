@@ -66,6 +66,8 @@ private:
 
 	std::vector<glm::vec2> t_brickPosition;
 
+	std::vector<glm::vec2> t_brickFixedPosition;
+
 	std::vector<std::string> t_levelData;
 
 	void updateBricks();

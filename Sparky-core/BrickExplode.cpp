@@ -10,13 +10,15 @@ BrickExplode::BrickExplode()
 }
 
 
-BrickExplode::BrickExplode(int index/*, glm::vec2 brickPosition*/)
+BrickExplode::BrickExplode(int index, glm::vec2 brickPosition)
 {
 	_index = index;
 	
 		_dim = glm::vec2(20.0f, 20.0f);
 		_toshow = true;
 
+
+		/*
 		std::ifstream file;
 		std::string fileName = "../Sparky-core/Levels/level1.txt";
 		file.open(fileName);
@@ -41,9 +43,12 @@ BrickExplode::BrickExplode(int index/*, glm::vec2 brickPosition*/)
 				}
 			}
 		}
+		
 	
 	
 	_position = brickPosition[index];
+	*/
+	_position = brickPosition;
 }
 
 
