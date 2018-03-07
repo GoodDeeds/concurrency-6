@@ -115,12 +115,17 @@ We maintain two windows to prevent flipping using the function SDL_GL_SwapWindow
 Bengine: basic game engine to build the whole game.
 
 
-BasicGame.cpp:
-This part is for client . The clients run according to this .
+
 
 
 BasicGameServer.cpp:
-    This is for server .
+    This is for server. The server runs according to it. Firstly, it calls initSystem() to initialise the game, i.e it initialises window, texture etc. initSystem() first opens a file level.txt to create a game on the screen according to the file. We process through the file. If we encounter 'B', we create a brick and if we encounter 'C',we create a fixed brick that cannot be destroyed by bomb.
+    It takes the information from every client and pass it to all other clients and updates the screen of other clients. Client passes the information to server in the form of bytes and the server then converts it to a string. It then processes the string and make the necessary changes. For eg, if a bomb is planted by a player, it changes the boolean from 0 to 1, find the position coordinates of bomb and make the bomb appear on the screen of all the other clients. It has many update functions like update character(), updateBullet().
+    
+    
+ BasicGame.cpp:
+This part is for client . The clients run according to this . It functions in same way as basic game server.
+    
 
 
 BrickExplode.cpp:
