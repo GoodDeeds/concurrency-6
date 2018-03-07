@@ -1,4 +1,118 @@
-﻿Bengine: basic game engine to build the whole game.
+﻿
+Bengine.cpp: 
+it initializes the whole SDL library .SDL is simple directmedia layer, 
+a cross platform development library  which allows low level access to the mouse keyboard.
+SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);   
+ this line of code helps in maintaining two windows as we can draw on one window 
+while clearing the other window which prevents flickering.
+
+Camera2D.cpp:
+“convertScreenToWorld” this function converts the screen coordinates into the the real world coordinates.
+ And whenever the position of the sprite is updated i.e if sprite moves right then the 
+camera coords should move to left. And camera matrix should be updated whenever the position vector 
+changes and scale changes.
+
+Errors.cpp:
+This is used for printing error messages . 
+Like when a file to be read failed to open it prints error message on the command prompt.
+
+GLSLProgram.cpp:
+A shader is a type of computer program that was originally used for shading 
+(the production of appropriate levels of light, darkness, and color within an image) .
+This class completely deals with the shaders. There are two files named “colourShading.vert”   and 
+“colourShading.frag” in which shaders program is written.
+
+“glCreateProgram()” - this returns a number which is our program id.
+“glCreateShader(GL_VERTEX_SHADER / GL_FRAGMENT_SHADER)” -this function takes only one argument and
+ creates the respective id for vertex shading and fragment shading.
+ And this shader id is always positive.
+ 
+“compileShader()” it takes two arguments filename and shading id and compiles the shader program.
+
+After compiling the shader programs we should link them to our program. 
+Before linking they should be attached to our program.
+“glAttachShader(programID, ShaderID)”
+“glLinkProgram(programID)”
+After successful linking detatch  the shader and delete it
+“glDetachShader(programID, ShaderID)”
+“glDeleteShader(ShaderID)”
+
+Uniform is a keyword used in shaders  to communicate to vertex or fragment shaders from outside.
+“getUniformLocation(filename)” it searches for the location of the uniform variable and returns its location.
+use() and unuse()  these functions go through all attributes ,enable and disable them respectively.
+If the shaders failed to compile then it deletes the shader and its id and prints error message on the command prompt.
+InputManager.cpp:
+	It mainly looks after the input from the mouse and the keyboard . 
+it helps in finding which key is pressed on the keyboard.
+For receiving the inputs , so that we can render smooth graphical movements of sprites , 
+as it depends on hardware type if we just change orientation on keyboard press.
+Later we can add key bindings to functions.
+Unordered map is used to reduce the amount of memory used to keep track of the buttons pressed, 
+released in the game : as we don’t have to do it for all buttons only specific buttons.
+
+isKeyPressed() -- checks it key is pressed in this frame and was not pressed in last frame, 
+can be used for shoot/operation on click or button press. 
+
+isKeyDown() -- checks if key is pressed in this frame, can be used for continuous shoot/operation on click(hold) or button hold.
+
+
+
+
+ImageLoader.cpp:
+	This class loads the png image into array of pixels. 
+It generates the gltexture object and assigns it an id . 
+and it binds the texture object and upload these pixels into the texture object and generate a mipmap 
+and then unbinds it. So this class is mainly useful for rendering png images on  the screen.
+
+
+IOManager.cpp:
+	 This  reads the text files and stores in the buffer in binary format  and 
+reaches the end of the file and gets the size of the file using “file.tellg()” function 
+and try to reduce the file by any header byte that might be present.
+
+
+Sprite.cpp:
+	In this we uses vertex buffer object (vbo) which is related to gpu
+“glGenBuffers(no of buffers,&id)” it creates the buffers and generate a particular id for it.
+And this buffer is binded using the function
+“glBindBuffer(GL_ARRAY_BUFFER, vboID)”
+And this buffer information is sent to the gpu using the fhunction
+glBufferData( ) this takes four arguments and pass the information to gpu.
+After this unbind the buffer. 
+draw()-  this function enables all attributes  which are mentioned in the shader program 
+and after using them it disables them.
+
+ResourceManager.cpp:
+	It just helps in rendering the texture by a function which takes the path of the texture 
+where it is located as parameter.
+
+TextureCache:
+	We can have different textures to be rendered on the screen. 
+For rendering  texture every we should know where it is and find it and then render it on the screen through a process. 
+So this texture cache helps in increasing the speed of program, 
+it maintains a map between each texture it come across with a number 
+and whenever it finds the texture that is in the map it  links it there by mapping with the same number .
+so we need not go to file origin always for rendering the texture,we can use it from the texture cache.
+when we find a new texture just map it with different number.
+
+
+Window.cpp:
+	It initializes window   using a function”SDL_CreateWindow()”
+and which type of window is needed can be selected here like full screen window ,borderless window etc can be decided by  a boolean variable.
+And background colour is assigned to the window.
+Alpha blending:
+alpha 0 - completely transparent , 1- not transparent
+Implemented using functions 
+	glEnable(GL_BLEND)
+	glBlendFunc( , )   
+Takes 2 argument 1st source factor , 2nd destination factor
+1)1st factor how our alpha to affect the source color , it multiplies the 1st argument with     
+  the color i.e if no background then 0 * color = 0 , if background 1 * color = color.
+2)2nd factor tells what portion of the color already on the screen we are going to use. i.e 2nd argument * background color.
+We maintain two windows to prevent flipping using the function SDL_GL_SwapWindow(_sdlWindow).
+
+
+Bengine: basic game engine to build the whole game.
 
 
 BasicGame.cpp:
