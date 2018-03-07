@@ -76,13 +76,11 @@ void BasicGame::initSystems() {
 
 			if (t_levelData[y][x] == 'B')                // B stands for explodable bricks
 			{
-				std::cout << "adding x = " << x << " adding y = " << y << std::endl;
 				t_brickPosition.push_back(glm::vec2(y, x));
 			}
 
 			if (t_levelData[y][x] == 'C')				// c stands for non-explodable bricks
 			{
-					std::cout << "adding C x = " << x << " adding y = " << y << std::endl;
 					_brickFixed.push_back(glm::vec2(y, x));
 
 			}
@@ -413,13 +411,11 @@ void BasicGame::processInput() {
 	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)|| _inputManager.isKeyDown(SDLK_SPACE)) {
 		glm::vec2 mouseCoords = _inputManager.getMouseCoords();
 		mouseCoords = _camera.convertScreenToWorld(mouseCoords);
-		std::cout << mouseCoords.x << " " << mouseCoords.y << std::endl;
 
 		glm::vec2 playerPosition = _mainPlayer->getPosition();
 		glm::vec2 direction = mouseCoords - playerPosition;
 		direction = glm::normalize(direction);    // normalise vector to unit length
 
-		std::cout << "emitting in direction client " << direction.x << " " << direction.y << " " << playerPosition.x << " " << playerPosition.x << std::endl;
 		
 		static Bengine::GLTexture texture = Bengine::ResourceManager::getTexture("../Sparky-core/Textures/bomb.png");
 
@@ -480,7 +476,6 @@ void BasicGame::updateBullets()
 					{
 						_chars[j].setLife(false);
 						std::cout << "Player dead " << std::endl;
-
 						if (_bullets[i].getPlayerID() == _currentIndex)
 							_mainPlayer->increaseScore();
 					}

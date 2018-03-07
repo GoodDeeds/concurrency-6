@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 {
 	int noOfPlayers = 0;
 	int indexOfClient = 0;
-	std::vector<Player> players;
+	std::vector<Player> players;                      // the vector of our players, containes their attribute
 	char name[100];
 	std::cout << "Enter your username\n";
 	std::cin >> name;
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	if (WSAStartup(MAKEWORD(2, 0), &info))
 		Bengine::fatalError("Could not start WSA");
 
-	if (choice == 1)
+	if (choice == 1)                            // for server
 	{
 		int clients;
 		std::cout << "Enter number of Clients" << std::endl;
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 		while (server.init);
 		std::string input = "";
 		server.receiveData(input); 
-		std::cout <<" receiving in server --  "<< input << std::endl;
+		std::cout <<"receiving in server -- "<< input << std::endl;
 		processString(input, name2, indexOfClient, noOfPlayers, players);
 		
 		BasicGameServer basicGame(noOfPlayers, indexOfClient, players, &server);
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 		
 		sockThread.join();
 	}
-	else if (choice == 2)
+	else if (choice == 2)                         // for client
 	{
 		std::cout << "Enter server's IP address\n";
 		std::string ip;
@@ -72,14 +72,14 @@ int main(int argc, char** argv)
 		socketClient client(ip, SOCK_PORT, 2048);
 		char input[1000];
 		client.receiveBytes(input);
-		std::cout << input << std::endl;	//connected msg
+		std::cout << input << std::endl;		// connected  msg
 
 		std::cout << "name --" << name << std::endl;
 
 		client.sendBytes(name);
 
 		client.receiveBytes(input);
-		std::cout << " receiving in client---- " << input << std::endl;	//connected msg
+		std::cout << "receiving in client --  " << input << std::endl;		// connected  msg
 
 
 
@@ -95,11 +95,10 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-
+// process the input data received, the individual data sets are separated by '|'
 void processString(std::string & input, std::string & name2, int & indexOfClient, int & noOfPlayers, std::vector<Player> & players)
 {
 	int i = 1;
-	// Data is received in the form no_of_players| followed by
 	while (input[i] != '|')
 	{
 		noOfPlayers = input[i] - '0' + 10 * noOfPlayers;

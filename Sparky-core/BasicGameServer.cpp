@@ -31,6 +31,7 @@ BasicGameServer::~BasicGameServer()
 void BasicGameServer::run() {
 
 	initSystems();
+	// initialises SDL and sets everything for our server
 
 	//sending data one time
 	std::string temp = _mainPlayer->getData() + "0|";
@@ -121,7 +122,7 @@ void BasicGameServer::receiver()
 		socket->receiveData(in);
 	mtx.lock();
 	data = std::string(in);
-	std::cout << data << std::endl;
+	//std::cout << data << std::endl;
 	mtx.unlock();
 	
 }
@@ -346,7 +347,6 @@ void BasicGameServer::updateBullets()
 
 			if (_bullets[i].remainingLife == 1)
 			{
-				std::cout << " size of vector " << _bullets.size() << std::endl;
 				std::cout << "Lifetime finished " << std::endl;	
 
 				for (int z = 0; z < _bricks.size(); z++)
@@ -430,7 +430,6 @@ void BasicGameServer::processInput() {
 			break;
 		case SDL_MOUSEMOTION:
 			_inputManager.setMouseCoords(evnt.motion.x, evnt.motion.y);
-			//std::cout << "x pos = " << evnt.motion.x << " y = " << evnt.motion.y << std::endl;
 			break;
 		case SDL_KEYDOWN:
 			_inputManager.pressKey(evnt.key.keysym.sym);
@@ -470,7 +469,6 @@ void BasicGameServer::processInput() {
 	if (_inputManager.isKeyPressed(SDL_BUTTON_LEFT)|| _inputManager.isKeyDown(SDLK_SPACE)) {
 		glm::vec2 mouseCoords = _inputManager.getMouseCoords();
 		mouseCoords = _camera.convertScreenToWorld(mouseCoords);
-		//std::cout << mouseCoords.x << " " << mouseCoords.y << std::endl;
 
 		glm::vec2 playerPosition = _mainPlayer->getPosition();
 		glm::vec2 direction = mouseCoords - playerPosition;

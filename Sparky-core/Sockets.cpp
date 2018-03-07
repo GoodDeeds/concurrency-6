@@ -172,6 +172,7 @@ socketServer::socketServer(std::string  & port, int MAX_CONN, Socket::Connection
 	}
 
 	// Create a SOCKET for connecting to server
+
 	master = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 	if ((master = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
 	{
@@ -355,7 +356,7 @@ void socketServer::select_activity()
 				mtx.unlock();
 				init = false;
 			}
-			//std::cout << "collected"<<collectedString << std::endl;
+			
 			for (int i = 0; i < max_clients; i++)
 			{
 

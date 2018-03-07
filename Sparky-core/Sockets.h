@@ -86,7 +86,7 @@ private:
 	std::vector<bool> flag;
 
 	std::string spawnPositions;
-	glm::vec2 respawnPosition[4] = { glm::vec2(130.0f,30.0f),glm::vec2(150.0f,30.0f), glm::vec2(150.0f,50.0f), glm::vec2(170.0f,70.0f) };
+	glm::vec2 respawnPosition[4] = { glm::vec2(130.0f,30.0f),glm::vec2(180.0f,30.0f), glm::vec2(230.0f,30.0f), glm::vec2(280.0f,30.0f) };
 	std::string serverData;
 	std::string playerData;
 	std::mutex mtx;

@@ -12,7 +12,7 @@ Bullet::Bullet(glm::vec2 pos, GLuint textureID , int lifeTime, int playerID, flo
 	_textureID = textureID;
 	_playerID = playerID;
 
-	_dim = glm::vec2(30.0f, 30.0f);
+	_dim = glm::vec2(20.0f, 20.0f);
 
 	_radius = radius;
 }
