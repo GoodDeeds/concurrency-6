@@ -124,19 +124,22 @@ BasicGameServer.cpp:
 
 
 BrickExplode.cpp:
-         This is to ensure that when a bomb is planted near the explodable bricks  when the bomb explodes the bricks will break.
-So it reads the text file which contains the level data and store position coordinates of all explodable blocks in a vector. And when the explodes the position coordinate is removed from the vector.
+         This is to ensure that when a bomb is planted near the explodable bricks and when the bomb explodes, the bricks will break.
+So it reads the text file which contains the level data and store position coordinates of all explodable blocks in a vector. And when the bomb explodes the position coordinate is removed from the vector. So, to explode a brick, we pass index and vector brickPosition to BrickExplode().
  
 Bullet.cpp:
-        This is for planting bomb  and noting the position coordinates where bomb has been planted. And when the bullet is planted the timer starts from 1000 and when it reaches 0 the bomb will explode .
+        This is for planting bomb. The class bullet contains variable for radius, lifetime and position vector(for noting the position coordinates where bomb has been planted). In variable playerId, it stores the id of player who has planted the bomb and in function getPlayerId(), it return the id of that player which has planted the bomb. In function getDamage(), it returns the amount of damage. Using draw(), we draw the bomb on the screen. So we specify the position co-ordinates, texture, colour etc of bomb to draw(). And when the bullet is planted the timer starts from 1000. So in function update, we keep on decreasing the remaining life of bomb and when it reaches 0 the bomb will explode.
+	
+Explosion.cpp:
+	This is used to show say some fire like thing on the screen as soon as the bomb explode.
 
 
 Character.cpp:
-        This is for generating characters and their health and their situation whether they are in bomb planting position or not. And it gets the position coordinates of the player and update them whenever it moves. And if the health becomes equal to zero then the character is respawned at random position.
+        This is for generating characters. It contains their health, their position, a bool variable alive to indicate whether they are alive or not and their situation whether they are in bomb planting position or not. And it gets the position coordinates of the player and update them whenever it moves. It has variable score which keeps track how many other players user has killed. So wwhen the player dies, the function PlayerDead() sets alive = false indicating the character is no longer alive. When a player kills other player, the function increaseScore() increments the score. The function setData(() keeps on updating position co-ordinates and health of player. And if the health becomes equal to zero then the character is respawned at random position. Then there are moveUP(), moveDOWN(), moveLEFT(), moveRIGHT() to move the character in different directions. They also take care of collision between the character and wall.
 
 
 Level.cpp:
-        It reads the text file with map init in the form of letters. It reads every line and store in vector of strings. Each character in the text file is assigned to a unique png file . So whenever it sees that particular character it automatically renders the respective image and resulting map can be seen on the output screen.
+        In this we create level, i.e what will be on screen, i.e where would be the boundary, bricks etc. In the function level() we pass screenwidth, screenheight and a textfile in which we have created the level. It reads the text file with map init in the form of letters. It reads every line and store in vector of strings. Each character in the text file is assigned to a unique png file . So whenever it sees that particular character it automatically renders the respective image and resulting map can be seen on the output screen.
 
 
 Main.cpp:
