@@ -89,7 +89,6 @@ void Character::moveUP(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2
 		// 20.0f is tile width , 10.0f is half of brick dim
 		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x*20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}
@@ -99,7 +98,6 @@ void Character::moveUP(std::vector<BrickExplode> &_bricks, std::vector<glm::vec2
 		// 20.0f is tile width , 10.0f is half of brick dim
 		if (_bricks[i].getVisibility() && abs(m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) < 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}
@@ -115,7 +113,6 @@ void Character::moveDOWN(std::vector<BrickExplode> &_bricks, std::vector<glm::ve
 	{
 		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y* 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) > 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}
@@ -125,7 +122,6 @@ void Character::moveDOWN(std::vector<BrickExplode> &_bricks, std::vector<glm::ve
 	{
 		if (_bricks[i].getVisibility() && abs(m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) > 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}
@@ -141,7 +137,6 @@ void Character::moveLEFT(std::vector<BrickExplode> &_bricks, std::vector<glm::ve
 	{
 		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) > 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}
@@ -150,7 +145,6 @@ void Character::moveLEFT(std::vector<BrickExplode> &_bricks, std::vector<glm::ve
 	{
 		if (_bricks[i].getVisibility() && abs(m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) > 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}
@@ -169,7 +163,6 @@ void Character::moveRIGHT(std::vector<BrickExplode> &_bricks, std::vector<glm::v
 	{
 		if (abs(m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _brickFixedPos[i].y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.x + m_dim.x / 2 - _brickFixedPos[i].x * 20.0f - 10.0f) < 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 
@@ -180,7 +173,6 @@ void Character::moveRIGHT(std::vector<BrickExplode> &_bricks, std::vector<glm::v
 		// 10.0f is half of brick dim
 		if (_bricks[i].getVisibility() && abs(m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) < MIN_WALL_DISTANCE && abs(m_position.y + m_dim.y / 2 - _bricks[i].getPosition().y * 20.0f - 10.0f) < MIN_WALL_DISTANCE && (m_position.x + m_dim.x / 2 - _bricks[i].getPosition().x * 20.0f - 10.0f) < 0)
 		{
-			std::cout << "returning " << std::endl;
 			return;
 		}
 	}

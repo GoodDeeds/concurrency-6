@@ -162,6 +162,7 @@ void BasicGameServer::gameLoop() {
 		updateChars();
 		updateBullets();
 		updatePlayerLife();
+		updateExplosions();
 
 		drawGame();
 
@@ -383,7 +384,7 @@ void BasicGameServer::updateBullets()
 					}
 					_bullets[i] = _bullets.back();
 					_bullets.pop_back();
-					_explosions.emplace_back(glm::vec2(bulPos.x, bulPos.y));
+					_explosions.emplace_back(glm::vec2(bulPos.x, bulPos.y)- glm::vec2(_bulletDim.x / 2, _bulletDim.y / 2));
 					continue;
 				}
 			}
@@ -515,11 +516,11 @@ void BasicGameServer::drawGame() {
 		_bullets[i].draw(_spriteBatch);
 	}
 
-	/*
+	
 	for (int i = 0; i < _explosions.size(); i++) {
 		_explosions[i].draw(_spriteBatch);
 	}
-	*/
+	
 
 	for (int i = 0; i < _bricks.size(); i++) {
 		if(_bricks[i].getVisibility())
